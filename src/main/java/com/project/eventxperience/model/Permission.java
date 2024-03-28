@@ -6,7 +6,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
 
 @Entity
-@Table(name = "permission")
+@Table(name = "db_permission")
 public class Permission extends BaseModel {
     @Column(name = "name")
     private String name;
