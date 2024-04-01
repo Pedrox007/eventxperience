@@ -25,11 +25,12 @@ public class AuthenticationService {
         this.passwordEncoder = passwordEncoder;
     }
 
-    public User signup(User user) {
-        user.setPassword(passwordEncoder.encode(user.getPassword()));
+        public User signup(User user) {
 
-        return userRepository.save(user);
-    }
+            user.setPassword(passwordEncoder.encode(user.getPassword()));
+
+            return userRepository.save(user);
+        }
 
     public User authenticate(User user) {
         authenticationManager.authenticate(
