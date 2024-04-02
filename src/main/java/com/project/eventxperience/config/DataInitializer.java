@@ -30,7 +30,7 @@ public class DataInitializer implements CommandLineRunner {
 
         userRepository.deleteAll();
         roleRepository.deleteAll();
-        
+
         // Criar roles
         Role roleUser = new Role();
         roleUser.setName("ROLE_USER");

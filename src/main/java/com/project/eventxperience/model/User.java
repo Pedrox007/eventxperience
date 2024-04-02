@@ -31,7 +31,7 @@ public class User extends BaseModel implements UserDetails {
     @Column(name = "active")
     private Boolean active = true;
 
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
             name = "user_role",
             joinColumns = @JoinColumn(name = "user_id"),
