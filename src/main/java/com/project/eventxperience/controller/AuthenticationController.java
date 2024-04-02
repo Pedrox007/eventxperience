@@ -1,6 +1,7 @@
 package com.project.eventxperience.controller;
 
 import com.project.eventxperience.model.User;
+import com.project.eventxperience.model.dto.UserDTO;
 import com.project.eventxperience.response.LoginResponse;
 import com.project.eventxperience.service.AuthenticationService;
 import com.project.eventxperience.service.JwtService;
@@ -23,8 +24,8 @@ public class AuthenticationController {
     }
 
     @PostMapping("/signup")
-    public ResponseEntity<User> register(@RequestBody User user) {
-        User registeredUser = authenticationService.signup(user);
+    public ResponseEntity<User> register(@RequestBody UserDTO userDTO) {
+        User registeredUser = authenticationService.signup(userDTO);
 
         return ResponseEntity.ok(registeredUser);
     }

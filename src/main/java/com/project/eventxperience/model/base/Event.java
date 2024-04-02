@@ -1,30 +1,21 @@
-package com.project.eventxperience.model;
+package com.project.eventxperience.model.base;
+
+import jakarta.persistence.*;
 
 import java.util.Date;
 
-public abstract class Event {
-    protected Integer id;
+@MappedSuperclass
+public abstract class Event extends BaseModel {
+    @Column(name = "name")
     protected String name;
+    @Column(name = "event_date")
     protected Date eventDate;
+    @Column(name = "description")
     protected String description;
+    @Column(name = "ticket_quantity")
     protected Integer ticketQuantity;
+    @Column(name = "ticket_price")
     protected Float ticketPrice;
-    protected Date createdOn;
-    protected Date updatedOn;
-
-    public Event(int id, String name, Date eventDate, String description) {
-    }
-
-    public Event(int id, String name, Date eventDate, String description, int ticketQuantity, float ticketPrice, Date createdOn, Date updatedOn) {
-    }
-
-    public abstract float calculateRateAverage();
-    public abstract int calculateTicketsAvailability();
-    public abstract void confirmPresence(User user);
-
-    public Integer getId() {
-        return id;
-    }
 
     public String getName() {
         return name;
@@ -46,18 +37,6 @@ public abstract class Event {
         return ticketPrice;
     }
 
-    public Date getCreatedOn() {
-        return createdOn;
-    }
-
-    public Date getUpdatedOn() {
-        return updatedOn;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
-    }
-
     public void setName(String name) {
         this.name = name;
     }
@@ -76,13 +55,5 @@ public abstract class Event {
 
     public void setTicketPrice(Float ticketPrice) {
         this.ticketPrice = ticketPrice;
-    }
-
-    public void setCreatedOn(Date createdOn) {
-        this.createdOn = createdOn;
-    }
-
-    public void setUpdatedOn(Date updatedOn) {
-        this.updatedOn = updatedOn;
     }
 }
