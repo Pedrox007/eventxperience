@@ -1,8 +1,10 @@
 package com.project.eventxperience.config;
 
 import com.project.eventxperience.model.Role;
+import com.project.eventxperience.model.Sport;
 import com.project.eventxperience.model.User;
 import com.project.eventxperience.repository.RoleRepository;
+import com.project.eventxperience.repository.SportRepository;
 import com.project.eventxperience.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
@@ -16,12 +18,14 @@ public class DataInitializer implements CommandLineRunner {
 
     private final RoleRepository roleRepository;
     private final UserRepository userRepository;
+    private final SportRepository sportRepository;
     private final PasswordEncoder passwordEncoder;
 
     @Autowired
-    public DataInitializer(RoleRepository roleRepository, UserRepository userRepository, PasswordEncoder passwordEncoder) {
+    public DataInitializer(RoleRepository roleRepository, UserRepository userRepository, SportRepository sportRepository, PasswordEncoder passwordEncoder) {
         this.roleRepository = roleRepository;
         this.userRepository = userRepository;
+        this.sportRepository = sportRepository;
         this.passwordEncoder = passwordEncoder;
     }
 
@@ -30,6 +34,7 @@ public class DataInitializer implements CommandLineRunner {
 
         userRepository.deleteAll();
         roleRepository.deleteAll();
+        sportRepository.deleteAll();
 
         // Criar roles
         Role roleUser = new Role();
@@ -59,6 +64,27 @@ public class DataInitializer implements CommandLineRunner {
         user2.setPassword(passwordEncoder.encode("password2"));
         user2.setRoles(Arrays.asList(roleOrganizer));
 
-        userRepository.saveAll(Arrays.asList(user1, user2));
+        User user3 = new User();
+        user3.setUsername("bruno");
+        user3.setEmail("bruno@example.com");
+        user3.setCpf("12334567898");
+        user3.setPhone("991497681");
+        user3.setPassword(passwordEncoder.encode("password3"));
+        user3.setRoles(Arrays.asList(roleOrganizer));
+
+        userRepository.saveAll(Arrays.asList(user1, user2, user3));
+
+        // Criar esportes
+        Sport sport1 = new Sport();
+        sport1.setName("Futebol");
+        sport1.setDescription("Jogo com bola e dois times com 11 jogadores cada.");
+        sport1.setParticipants(22);
+
+        Sport sport2 = new Sport();
+        sport2.setName("Basquete");
+        sport2.setDescription("Jogo com bola e dois times com 5 jogadores cada.");
+        sport2.setParticipants(10);
+
+        sportRepository.saveAll(Arrays.asList(sport1, sport2));
     }
 }

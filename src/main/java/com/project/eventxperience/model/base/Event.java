@@ -1,5 +1,6 @@
 package com.project.eventxperience.model.base;
 
+import com.project.eventxperience.model.User;
 import jakarta.persistence.*;
 
 import java.util.Date;
@@ -16,6 +17,8 @@ public abstract class Event extends BaseModel {
     protected Integer ticketQuantity;
     @Column(name = "ticket_price")
     protected Float ticketPrice;
+    @ManyToOne
+    protected User creator;
 
     public String getName() {
         return name;
@@ -37,6 +40,10 @@ public abstract class Event extends BaseModel {
         return ticketPrice;
     }
 
+    public User getCreator() {
+        return creator;
+    }
+
     public void setName(String name) {
         this.name = name;
     }
@@ -55,5 +62,9 @@ public abstract class Event extends BaseModel {
 
     public void setTicketPrice(Float ticketPrice) {
         this.ticketPrice = ticketPrice;
+    }
+
+    public void setCreator(User creator) {
+        this.creator = creator;
     }
 }

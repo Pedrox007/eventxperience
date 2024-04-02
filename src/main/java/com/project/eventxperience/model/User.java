@@ -37,10 +37,9 @@ public class User extends BaseModel implements UserDetails {
             joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "role_id")
     )
-    private List<Role> roles;
+    private List<Role> roles = new ArrayList<>();
 
     public User() {
-        this.roles = new ArrayList<>();
     }
 
     public User(String username, String email, String password, List<Role> roles) {
