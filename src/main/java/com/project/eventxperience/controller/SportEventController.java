@@ -11,10 +11,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/sport_events")
@@ -37,5 +34,11 @@ public class SportEventController {
         SportEvent createdSportEvent = sportEventService.addSportEvent(sportEventDTO);
 
         return ResponseEntity.status(HttpStatus.CREATED).body(createdSportEvent);
+    }
+
+    @GetMapping
+    public ResponseEntity<Iterable<SportEvent>> getSportEvents() {
+        Iterable<SportEvent> sportEvents = sportEventService.getSportEvents();
+        return ResponseEntity.ok(sportEvents);
     }
 }

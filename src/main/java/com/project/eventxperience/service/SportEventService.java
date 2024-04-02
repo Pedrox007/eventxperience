@@ -41,4 +41,8 @@ public class SportEventService {
 
         return sportEvent;
     }
+
+    public Iterable<SportEvent> getSportEvents() {
+        return sportEventRepository.findAll();
+    }
 }

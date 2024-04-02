@@ -30,6 +30,8 @@ public class User extends BaseModel implements UserDetails {
 
     @Column(name = "active")
     private Boolean active = true;
+    @Column(name = "points")
+    private Integer points = 0;
 
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
@@ -134,5 +136,13 @@ public class User extends BaseModel implements UserDetails {
 
     public void setRoles(List<Role> roles) {
         this.roles = roles;
+    }
+
+    public Integer getPoints() {
+        return points;
+    }
+
+    public void setPoints(Integer points) {
+        this.points = points;
     }
 }
