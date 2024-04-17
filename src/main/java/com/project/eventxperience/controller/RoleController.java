@@ -7,15 +7,25 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/roles")
 public class RoleController {
 
     private final RoleService roleService;
 
+
+
     @Autowired
     public RoleController(RoleService roleService) {
         this.roleService = roleService;
+    }
+
+    @GetMapping
+    public List<Role> getRoles(@RequestParam String username) {
+        return roleService.getRoleByUserName(username);
+
     }
 
     @PostMapping("/save")

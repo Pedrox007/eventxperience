@@ -6,6 +6,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 @Service
 public class RoleService {
 
@@ -20,4 +22,9 @@ public class RoleService {
     public Role saveRole(Role role) {
         return roleRepository.save(role);
     }
+
+    public List<Role> getRoleByUserName(String username) {
+        return roleRepository.findRoleByName(username);
+    }
 }
+

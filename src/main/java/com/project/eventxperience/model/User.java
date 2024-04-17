@@ -30,6 +30,7 @@ public class User extends BaseModel implements UserDetails {
 
     @Column(name = "active")
     private Boolean active = true;
+
     @Column(name = "points")
     private Integer points = 0;
 
@@ -40,6 +41,20 @@ public class User extends BaseModel implements UserDetails {
             inverseJoinColumns = @JoinColumn(name = "role_id")
     )
     private List<Role> roles = new ArrayList<>();
+
+    @ManyToMany
+    @JoinTable(
+            name = "attraction_user",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "attraction_id")
+    )
+    private List<Attraction> attraction = new ArrayList<>();
+
+    @OneToMany (mappedBy = "user")
+    List<Claim> claims = new ArrayList<>();
+
+    @OneToMany (mappedBy = "user")
+    List<Ticket> tickets = new ArrayList<>();
 
     public User() {
     }
