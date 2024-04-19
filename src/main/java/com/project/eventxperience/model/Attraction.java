@@ -13,5 +13,5 @@ public class Attraction extends BaseModel {
     private String name;
 
     @ManyToMany(mappedBy = "attractions")
-    private List<Attraction> attraction;
+    private List<Attraction> attractions;
 }
