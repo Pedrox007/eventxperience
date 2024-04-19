@@ -1,4 +1,4 @@
-package com.project.eventxperience.enums;
+package com.project.eventxperience.model.enums;
 
 public enum RatingValues {
     GREAT,

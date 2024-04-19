@@ -2,10 +2,14 @@ package com.project.eventxperience.model;
 
 import com.project.eventxperience.model.base.BaseModel;
 import jakarta.persistence.*;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 
+@EqualsAndHashCode(callSuper = true)
 @Entity
 @Table(name="db_claim")
+@Data
 public class Claim extends BaseModel {
     @Column
     private boolean confirmed;
@@ -15,6 +19,6 @@ public class Claim extends BaseModel {
     private User user;
 
     @ManyToOne
-    @JoinColumn(name="sport_event_id")
-    private SportEvent sportEvent;
+    @JoinColumn(name="reward_id")
+    private Reward reward;
 }
