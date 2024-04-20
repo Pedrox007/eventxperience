@@ -12,7 +12,7 @@ public class Rating {
     @GeneratedValue
     private int id;
 
-    @Column
+    @Enumerated(EnumType.STRING)
     private RatingValues rating;
 
     @ManyToOne
