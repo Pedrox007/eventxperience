@@ -7,6 +7,7 @@ import com.project.eventxperience.model.base.Event;
 import com.project.eventxperience.model.dto.AttractionDTO;
 import com.project.eventxperience.repository.AttractionRepository;
 import com.project.eventxperience.repository.SportEventRepository;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.util.Streamable;
 import org.springframework.stereotype.Service;
@@ -48,5 +49,21 @@ public class AttractionService {
 
     public List<Attraction> getAttractions(Long eventId) {
         return attractionRepository.findAllByEventId(eventId);
+    }
+
+    @Transactional
+    public List<Attraction> deleteAttractions(Long id, List<Long> attractionsIds) {
+        List<Attraction> deletedAttractions = new ArrayList<>();
+        Attraction attraction;
+        for (Long attractionId : attractionsIds) {
+            attraction = attractionRepository.findById(attractionId).orElseThrow(() -> new IllegalArgumentException("Attraction not found"));
+            if (!attraction.getSportEvent().getId().equals(id)) {
+                throw new IllegalArgumentException("Attraction not found in event");
+            }
+            attractionRepository.deleteById(attractionId);
+            deletedAttractions.add(attraction);
+        }
+
+        return deletedAttractions;
     }
 }

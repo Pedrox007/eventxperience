@@ -54,4 +54,11 @@ public class SportEventController {
         List<Attraction> attractions = attractionService.saveAttractions(id, attractionsDTO);
         return ResponseEntity.ok(attractions);
     }
+
+    @DeleteMapping("/{id}/delete_attractions")
+    public ResponseEntity<List<Attraction>> deleteAttractions(@PathVariable Long id, @RequestBody List<Long> attractionsIds) {
+        List<Attraction> attractions = attractionService.deleteAttractions(id, attractionsIds);
+
+        return ResponseEntity.ok(attractions);
+    }
 }
