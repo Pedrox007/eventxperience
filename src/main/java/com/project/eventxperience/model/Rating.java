@@ -22,4 +22,5 @@ public class Rating {
     @ManyToOne
     @JoinColumn(name="attraction_id")
     private Attraction attraction;
+
 }

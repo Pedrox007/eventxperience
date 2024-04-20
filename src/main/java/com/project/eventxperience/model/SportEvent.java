@@ -21,7 +21,7 @@ public class SportEvent extends Event {
     @JoinColumn(name = "sport_id")
     private Sport sport;
 
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
             name = "sportevent_reward",
             joinColumns = @JoinColumn(name = "event_id"),
@@ -29,10 +29,10 @@ public class SportEvent extends Event {
     )
     protected List<Reward> rewards;
 
-    @OneToMany (mappedBy = "sportEvent")
+    @OneToMany (mappedBy = "sportEvent", fetch = FetchType.EAGER)
     List<Ticket> tickets = new ArrayList<>();
 
-    @OneToMany(mappedBy = "sportEvent")
+    @OneToMany(mappedBy = "sportEvent", fetch = FetchType.EAGER)
     protected List<Attraction> attractions;
 
     public SportEvent() {

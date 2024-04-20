@@ -46,18 +46,13 @@ public class User extends BaseModel implements UserDetails {
     )
     private List<Role> roles = new ArrayList<>();
 
-    @ManyToMany
-    @JoinTable(
-            name = "attraction_user",
-            joinColumns = @JoinColumn(name = "user_id"),
-            inverseJoinColumns = @JoinColumn(name = "attraction_id")
-    )
-    private List<Attraction> attraction = new ArrayList<>();
+    @OneToMany(mappedBy = "user", fetch = FetchType.EAGER)
+    private List<Rating> ratings = new ArrayList<>();
 
-    @OneToMany (mappedBy = "user")
+    @OneToMany (mappedBy = "user", fetch = FetchType.EAGER)
     List<Claim> claims = new ArrayList<>();
 
-    @OneToMany (mappedBy = "user")
+    @OneToMany (mappedBy = "user", fetch = FetchType.EAGER)
     List<Ticket> tickets = new ArrayList<>();
 
     public User() {
