@@ -7,6 +7,7 @@ import com.project.eventxperience.model.dto.AttractionDTO;
 import com.project.eventxperience.model.dto.SportEventDTO;
 import com.project.eventxperience.service.AttractionService;
 import com.project.eventxperience.service.SportEventService;
+import com.project.eventxperience.service.TicketService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -23,10 +24,14 @@ public class SportEventController {
     private final SportEventService sportEventService;
     private final AttractionService attractionService;
 
+    private final TicketService ticketService;
+
+
     @Autowired
-    public SportEventController(SportEventService sportEventService, AttractionService attractionService) {
+    public SportEventController(SportEventService sportEventService, AttractionService attractionService, TicketService ticketService) {
         this.sportEventService = sportEventService;
         this.attractionService = attractionService;
+        this.ticketService = ticketService;
     }
 
     @PostMapping
@@ -65,5 +70,11 @@ public class SportEventController {
         List<Attraction> attractions = attractionService.deleteAttractions(id, attractionsIds);
 
         return ResponseEntity.ok(attractions);
+    }
+
+    @GetMapping("/{eventId}/total")
+    public ResponseEntity<Integer> totalConfirmedUsersForEvent(@PathVariable Long eventId) {
+        int totalConfirmedUsers = ticketService.countConfirmedUsersForEvent(eventId);
+        return ResponseEntity.ok(totalConfirmedUsers);
     }
 }

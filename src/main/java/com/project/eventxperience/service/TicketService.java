@@ -34,7 +34,6 @@ public class TicketService {
             throw new IllegalArgumentException("O usuário já possui um ticket para este evento.");
         }
 
-        // Criar um novo ticket
         Ticket ticket = new Ticket();
         ticket.setPrice(sportEvent.getTicketPrice());
         ticket.setUser(user);
@@ -49,21 +48,16 @@ public class TicketService {
             throw new IllegalArgumentException("O evento esportivo ou o criador do evento não foi encontrado.");
         }
 
-        // Verificar se o usuário organizador tem permissão para confirmar a presença
-        System.out.println(isOrganizerOfEvent(sportEvent, organizer));
         if (!isOrganizerOfEvent(sportEvent, organizer)) {
             throw new IllegalArgumentException("Você não tem permissão para confirmar a presença neste evento.");
         }
 
-        // Obter o ticket correspondente ao evento e userId
         Ticket ticket = ticketRepository.findBySportEventIdAndUserId(sportEvent.getId(), userId);
 
-        // Verificar se o ticket existe
         if (ticket == null) {
             throw new EntityNotFoundException("Ticket não encontrado.");
         }
 
-        // Atualizar o status do ticket para confirmado
         ticket.setConfirmed(true);
         ticketRepository.save(ticket);
     }
@@ -74,12 +68,20 @@ public class TicketService {
         if (event.getCreator() != null && event.getCreator().getId().equals(user.getId())) {
             for (Role role : roles) {
                 if ("ROLE_ORGANIZER".equals(role.getName())) {
-                    System.out.println("- Usuário é um organizador");
                     return true;
                 }
             }
         }
 
         return false;
+    }
+
+    public boolean hasConfirmedAttendance(SportEvent sportEvent, Long userId) {
+        Ticket ticket = ticketRepository.findBySportEventIdAndUserId(sportEvent.getId(), userId);
+        return ticket != null && ticket.isConfirmed();
+    }
+
+    public int countConfirmedUsersForEvent(Long eventId) {
+        return ticketRepository.countBySportEventIdAndConfirmedTrue(eventId);
     }
 }

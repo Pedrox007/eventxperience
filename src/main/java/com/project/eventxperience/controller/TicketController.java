@@ -5,6 +5,7 @@ import com.project.eventxperience.model.Ticket;
 import com.project.eventxperience.model.User;
 import com.project.eventxperience.service.SportEventService;
 import com.project.eventxperience.service.TicketService;
+import com.project.eventxperience.service.UserService;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -22,6 +23,9 @@ public class TicketController {
 
     private final TicketService ticketService;
     private final SportEventService sportEventService;
+
+    @Autowired
+    private UserService userService;
 
     @Autowired
     public TicketController(TicketService ticketService, SportEventService sportEventService) {
@@ -51,13 +55,16 @@ public class TicketController {
         User organizer = (User) authentication.getPrincipal();
 
         try {
-            // Obter o SportEvent correspondente ao eventId
             SportEvent sportEvent = sportEventService.findById(eventId);
 
-            // Confirmar a presença
-            ticketService.confirmAttendance(sportEvent, userId, organizer);
+            if (ticketService.hasConfirmedAttendance(sportEvent, userId)) {
+                return ResponseEntity.badRequest().body("Usuário já foi confirmado neste evento.");
+            }
 
-            return ResponseEntity.ok("Presença confirmada com sucesso.");
+            ticketService.confirmAttendance(sportEvent, userId, organizer);
+            userService.addPointsToUser(userId, 5);
+
+            return ResponseEntity.ok("Presença confirmada com sucesso.O usuário foi recompensado com 5 pontos.");
         } catch (EntityNotFoundException e) {
             return ResponseEntity.notFound().build();
         } catch (IllegalArgumentException e) {
