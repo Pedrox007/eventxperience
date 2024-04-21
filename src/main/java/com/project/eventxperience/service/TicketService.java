@@ -62,7 +62,7 @@ public class TicketService {
         if (ticket == null) {
             throw new EntityNotFoundException("Ticket não encontrado.");
         }
-        
+
         // Atualizar o status do ticket para confirmado
         ticket.setConfirmed(true);
         ticketRepository.save(ticket);

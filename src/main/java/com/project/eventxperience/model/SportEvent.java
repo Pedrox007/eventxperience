@@ -1,4 +1,6 @@
 package com.project.eventxperience.model;
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.project.eventxperience.model.base.Event;
 import jakarta.persistence.*;
 import lombok.Data;
@@ -32,7 +34,8 @@ public class SportEvent extends Event {
     @OneToMany (mappedBy = "sportEvent", fetch = FetchType.EAGER)
     List<Ticket> tickets = new ArrayList<>();
 
-    @OneToMany(mappedBy = "sportEvent", fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "sportEvent", fetch = FetchType.LAZY)
+    @JsonManagedReference
     protected List<Attraction> attractions;
 
     public SportEvent() {
