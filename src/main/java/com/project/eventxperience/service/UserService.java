@@ -11,10 +11,4 @@ public class UserService {
     @Autowired
     UserRepository userRepository;
 
-    @Transactional
-    User saveUser(User user) {
-        userRepository.save(user);
-
-        return user;
-    }
 }

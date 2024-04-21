@@ -5,6 +5,8 @@ import com.project.eventxperience.repository.SportRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class SportService {
 
@@ -17,5 +19,9 @@ public class SportService {
 
     public Sport addSport(Sport sport) {
         return sportRepository.save(sport);
+    }
+
+    public List<Sport> getAllSports() {
+        return sportRepository.findAll();
     }
 }

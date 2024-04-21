@@ -2,6 +2,7 @@ package com.project.eventxperience.controller;
 
 import com.project.eventxperience.model.Sport;
 import com.project.eventxperience.model.SportEvent;
+import com.project.eventxperience.model.Ticket;
 import com.project.eventxperience.model.User;
 import com.project.eventxperience.model.dto.SportEventDTO;
 import com.project.eventxperience.service.SportEventService;
@@ -12,6 +13,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/sport_events")
@@ -40,5 +43,11 @@ public class SportEventController {
     public ResponseEntity<Iterable<SportEvent>> getSportEvents() {
         Iterable<SportEvent> sportEvents = sportEventService.getSportEvents();
         return ResponseEntity.ok(sportEvents);
+    }
+
+    @GetMapping("/{eventId}/participants")
+    public ResponseEntity<List<User>> getAllParticipantsByEventId(@PathVariable Long eventId) {
+        List<User> participants = sportEventService.getAllParticipantsByEventId(eventId);
+        return ResponseEntity.ok(participants);
     }
 }

@@ -40,6 +40,7 @@ public class AuthenticationService {
             user.setUsername(userDTO.getUsername());
             user.setCpf(userDTO.getCpf());
             user.setEmail(userDTO.getEmail());
+            user.setPhone(userDTO.getPhone());
             user.setPassword(passwordEncoder.encode(userDTO.getPassword()));
             if (!userDTO.getRoles().isEmpty()) {
                 List<String> rolesIds = userDTO.getRoles();

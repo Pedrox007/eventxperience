@@ -58,10 +58,12 @@ public class User extends BaseModel implements UserDetails {
     public User() {
     }
 
-    public User(String username, String email, String password, List<Role> roles) {
+    public User(String username, String email, String password,String cpf, String phone, List<Role> roles) {
         this.username = username;
         this.email = email;
         this.password = password;
+        this.cpf = cpf;
+        this.phone = phone;
         this.roles = roles;
     }
 
