@@ -5,6 +5,7 @@ import com.project.eventxperience.repository.UserRepository;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -13,13 +14,17 @@ public class UserService {
     UserRepository userRepository;
 
     public void addPointsToUser(Long userId, int pointsToAdd) {
-        User user = userRepository.findById(userId).orElseThrow(() -> new EntityNotFoundException("User not found"));
+        try {
+            User user = userRepository.findById(userId)
+                    .orElseThrow(() -> new EntityNotFoundException("User not found"));
 
-        int currentPoints = user.getPoints();
-        int newPoints = currentPoints + pointsToAdd;
-        user.setPoints(newPoints);
+            int currentPoints = user.getPoints();
+            int newPoints = currentPoints + pointsToAdd;
+            user.setPoints(newPoints);
 
-        userRepository.save(user);
+            userRepository.save(user);
+        } catch (DataAccessException e) {
+            throw new IllegalStateException("Erro ao adicionar pontos ao usuário", e);
+        }
     }
-
 }

@@ -8,6 +8,7 @@ import com.project.eventxperience.repository.SportEventRepository;
 import com.project.eventxperience.repository.TicketRepository;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -26,40 +27,48 @@ public class TicketService {
     }
 
     public Ticket purchaseTicket(User user, SportEvent sportEvent) {
-        // Verifica se o usuário já possui um ticket para este evento
-        boolean hasTicket = user.getTickets().stream()
-                .anyMatch(ticket -> ticket.getSportEvent().getId().equals(sportEvent.getId()));
+        try {
+            // Verifica se o usuário já possui um ticket para este evento
+            boolean hasTicket = user.getTickets().stream()
+                    .anyMatch(ticket -> ticket.getSportEvent().getId().equals(sportEvent.getId()));
 
-        if (hasTicket) {
-            throw new IllegalArgumentException("O usuário já possui um ticket para este evento.");
+            if (hasTicket) {
+                throw new IllegalArgumentException("O usuário já possui um ticket para este evento.");
+            }
+
+            Ticket ticket = new Ticket();
+            ticket.setPrice(sportEvent.getTicketPrice());
+            ticket.setUser(user);
+            ticket.setSportEvent(sportEvent);
+            ticket.setConfirmed(false);
+
+            return ticketRepository.save(ticket);
+        } catch (DataAccessException e) {
+            throw new IllegalStateException("Erro ao obter o ticket", e);
         }
-
-        Ticket ticket = new Ticket();
-        ticket.setPrice(sportEvent.getTicketPrice());
-        ticket.setUser(user);
-        ticket.setSportEvent(sportEvent);
-        ticket.setConfirmed(false);
-
-        return ticketRepository.save(ticket);
     }
 
     public void confirmAttendance(SportEvent sportEvent, Long userId, User organizer) {
-        if (sportEvent == null || sportEvent.getCreator() == null) {
-            throw new IllegalArgumentException("O evento esportivo ou o criador do evento não foi encontrado.");
+        try {
+            if (sportEvent == null || sportEvent.getCreator() == null) {
+                throw new IllegalArgumentException("O evento esportivo ou o criador do evento não foi encontrado.");
+            }
+
+            if (!isOrganizerOfEvent(sportEvent, organizer)) {
+                throw new IllegalArgumentException("Você não tem permissão para confirmar a presença neste evento.");
+            }
+
+            Ticket ticket = ticketRepository.findBySportEventIdAndUserId(sportEvent.getId(), userId);
+
+            if (ticket == null) {
+                throw new EntityNotFoundException("Ticket não encontrado.");
+            }
+
+            ticket.setConfirmed(true);
+            ticketRepository.save(ticket);
+        } catch (DataAccessException e) {
+            throw new IllegalStateException("Erro ao confirmar presença no evento", e);
         }
-
-        if (!isOrganizerOfEvent(sportEvent, organizer)) {
-            throw new IllegalArgumentException("Você não tem permissão para confirmar a presença neste evento.");
-        }
-
-        Ticket ticket = ticketRepository.findBySportEventIdAndUserId(sportEvent.getId(), userId);
-
-        if (ticket == null) {
-            throw new EntityNotFoundException("Ticket não encontrado.");
-        }
-
-        ticket.setConfirmed(true);
-        ticketRepository.save(ticket);
     }
 
     private boolean isOrganizerOfEvent(SportEvent event, User user) {

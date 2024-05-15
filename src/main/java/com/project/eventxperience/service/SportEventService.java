@@ -11,6 +11,7 @@ import com.project.eventxperience.repository.TicketRepository;
 import com.project.eventxperience.repository.UserRepository;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 import org.springframework.http.HttpStatus;
@@ -36,42 +37,53 @@ public class SportEventService {
     }
 
     public SportEvent addSportEvent(SportEventDTO sportEventDTO) {
-        SportEvent sportEvent = new SportEvent();
-        sportEvent.setName(sportEventDTO.getName());
-        sportEvent.setEventDate(sportEventDTO.getEventDate());
-        sportEvent.setDescription(sportEventDTO.getDescription());
-        sportEvent.setTicketQuantity(sportEventDTO.getTicketQuantity());
-        sportEvent.setTicketPrice(sportEventDTO.getTicketPrice());
-        sportEvent.setCreator(userRepository.findById(sportEventDTO.getCreator_id()).orElse(null));
-        if (sportEventDTO.getSport_id() != null) {
-            Sport sport = sportRepository.findById(sportEventDTO.getSport_id()).orElse(null);
+        try {
+            SportEvent sportEvent = new SportEvent();
+            sportEvent.setName(sportEventDTO.getName());
+            sportEvent.setEventDate(sportEventDTO.getEventDate());
+            sportEvent.setDescription(sportEventDTO.getDescription());
+            sportEvent.setTicketQuantity(sportEventDTO.getTicketQuantity());
+            sportEvent.setTicketPrice(sportEventDTO.getTicketPrice());
+            sportEvent.setCreator(userRepository.findById(sportEventDTO.getCreator_id()).orElse(null));
+            if (sportEventDTO.getSport_id() != null) {
+                Sport sport = sportRepository.findById(sportEventDTO.getSport_id()).orElse(null);
+                sportEvent.setSport(sport);
+            }
 
-            sportEvent.setSport(sport);
+            return sportEventRepository.save(sportEvent);
+        } catch (DataAccessException e) {
+            throw new IllegalStateException("Erro ao adicionar evento de esporte", e);
         }
-
-        sportEventRepository.save(sportEvent);
-
-        return sportEvent;
     }
 
     public Iterable<SportEvent> getSportEvents() {
-        return sportEventRepository.findAll();
+        try {
+            return sportEventRepository.findAll();
+        } catch (DataAccessException e) {
+            throw new IllegalStateException("Erro ao obter eventos de esporte", e);
+        }
     }
 
     public SportEvent findById(Long id) {
-        return sportEventRepository.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException("Evento não encontrado com o ID: " + id));
+        try {
+            return sportEventRepository.findById(id)
+                    .orElseThrow(() -> new EntityNotFoundException("Evento não encontrado com o ID: " + id));
+        } catch (DataAccessException e) {
+            throw new IllegalStateException("Erro ao buscar evento por ID", e);
+        }
     }
 
     public List<User> getAllParticipantsByEventId(Long eventId) {
-        // Obter o evento pelo ID
-        SportEvent event = sportEventRepository.findById(eventId).orElse(null);
-        if (event != null) {
-            return event.getTickets().stream()
-                    .map(Ticket::getUser)
-                    .collect(Collectors.toList());
+        try {
+            SportEvent event = sportEventRepository.findById(eventId).orElse(null);
+            if (event != null) {
+                return event.getTickets().stream()
+                        .map(Ticket::getUser)
+                        .collect(Collectors.toList());
+            }
+            return Collections.emptyList();
+        } catch (DataAccessException e) {
+            throw new IllegalStateException("Erro ao buscar participantes do evento por ID", e);
         }
-        return Collections.emptyList();
     }
-
 }

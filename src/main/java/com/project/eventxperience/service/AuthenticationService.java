@@ -5,10 +5,14 @@ import com.project.eventxperience.model.User;
 import com.project.eventxperience.model.dto.UserDTO;
 import com.project.eventxperience.repository.RoleRepository;
 import com.project.eventxperience.repository.UserRepository;
+import org.springframework.dao.DataAccessException;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.stereotype.Service;
+
 
 import java.util.ArrayList;
 import java.util.List;
@@ -42,6 +46,7 @@ public class AuthenticationService {
             user.setEmail(userDTO.getEmail());
             user.setPhone(userDTO.getPhone());
             user.setPassword(passwordEncoder.encode(userDTO.getPassword()));
+
             if (!userDTO.getRoles().isEmpty()) {
                 List<String> rolesIds = userDTO.getRoles();
                 List<Role> roles = new ArrayList<>();
@@ -50,14 +55,18 @@ public class AuthenticationService {
                         Optional<Role> role = roleRepository.findByName(name);
                         role.ifPresent(roles::add);
                     });
-                } catch (Exception e) {
-                    throw new RuntimeException(e);
+                } catch (DataAccessException e) {
+                    throw new RuntimeException("Erro ao buscar roles no banco de dados", e);
                 }
 
                 user.setRoles(roles);
             }
 
-            return userRepository.save(user);
+            try {
+                return userRepository.save(user);
+            } catch (DataAccessException e) {
+                throw new RuntimeException("Erro ao salvar usuário no banco de dados", e);
+            }
         }
 
     public User authenticate(User user) {
@@ -68,7 +77,22 @@ public class AuthenticationService {
                 )
         );
 
-        return userRepository.findByUsername(user.getUsername())
-                .orElseThrow();
+        try {
+            authenticationManager.authenticate(
+                    new UsernamePasswordAuthenticationToken(
+                            user.getUsername(),
+                            user.getPassword()
+                    )
+            );
+        } catch (AuthenticationException e) {
+            throw new RuntimeException("Falha na autenticação: " + e.getMessage(), e);
+        }
+
+        try {
+            return userRepository.findByUsername(user.getUsername())
+                    .orElseThrow(() -> new UsernameNotFoundException("Usuário não encontrado"));
+        } catch (DataAccessException e) {
+            throw new RuntimeException("Erro ao buscar usuário no banco de dados", e);
+        }
     }
 }

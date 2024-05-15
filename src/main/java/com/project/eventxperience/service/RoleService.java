@@ -3,6 +3,7 @@ package com.project.eventxperience.service;
 import com.project.eventxperience.model.Role;
 import com.project.eventxperience.repository.RoleRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -20,11 +21,19 @@ public class RoleService {
 
     @Transactional
     public Role saveRole(Role role) {
-        return roleRepository.save(role);
+        try {
+            return roleRepository.save(role);
+        } catch (DataAccessException e) {
+            throw new IllegalStateException("Erro ao salvar a função no banco de dados", e);
+        }
     }
 
     public List<Role> getRoleByUserName(String username) {
-        return roleRepository.findRoleByUserName(username);
+        try {
+            return roleRepository.findRoleByUserName(username);
+        } catch (DataAccessException e) {
+            throw new IllegalStateException("Erro ao buscar o perfil pelo nome do usuário no banco de dados", e);
+        }
     }
 }
 
