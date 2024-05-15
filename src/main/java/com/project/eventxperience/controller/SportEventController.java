@@ -59,15 +59,15 @@ public class SportEventController {
 
     }
 
-    @PostMapping("/{id}/save_attractions")
-    public ResponseEntity<List<Attraction>> saveAttractions(@PathVariable Long id, @RequestBody List<AttractionDTO> attractionsDTO) {
-        List<Attraction> attractions = attractionService.saveAttractions(id, attractionsDTO);
+    @PostMapping("/{eventId}/save_attractions")
+    public ResponseEntity<List<Attraction>> saveAttractions(@PathVariable Long eventId, @RequestBody List<AttractionDTO> attractionsDTO) {
+        List<Attraction> attractions = attractionService.saveAttractions(eventId, attractionsDTO);
         return ResponseEntity.ok(attractions);
     }
 
-    @DeleteMapping("/{id}/delete_attractions")
-    public ResponseEntity<List<Attraction>> deleteAttractions(@PathVariable Long id, @RequestBody List<Long> attractionsIds) {
-        List<Attraction> attractions = attractionService.deleteAttractions(id, attractionsIds);
+    @DeleteMapping("/{eventId}/delete_attractions")
+    public ResponseEntity<List<Attraction>> deleteAttractions(@PathVariable Long eventId, @RequestBody List<Long> attractionsIds) {
+        List<Attraction> attractions = attractionService.deleteAttractions(eventId, attractionsIds);
 
         return ResponseEntity.ok(attractions);
     }

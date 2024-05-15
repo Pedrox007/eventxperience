@@ -1,5 +1,7 @@
 package com.project.eventxperience.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.project.eventxperience.model.base.BaseModel;
 import jakarta.persistence.*;
 import lombok.Data;
@@ -47,6 +49,7 @@ public class User extends BaseModel implements UserDetails {
     private List<Role> roles = new ArrayList<>();
 
     @OneToMany(mappedBy = "user", fetch = FetchType.EAGER)
+    @JsonBackReference
     private List<Rating> ratings = new ArrayList<>();
 
     @OneToMany (mappedBy = "user", fetch = FetchType.EAGER)

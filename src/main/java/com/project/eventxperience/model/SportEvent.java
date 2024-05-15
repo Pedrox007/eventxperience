@@ -1,6 +1,8 @@
 package com.project.eventxperience.model;
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import com.project.eventxperience.model.base.Event;
 import jakarta.persistence.*;
 import lombok.Data;
@@ -14,6 +16,7 @@ import java.util.List;
 @Entity
 @Table(name = "db_sport_event")
 @Data
+@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
 public class SportEvent extends Event {
     @OneToOne
     @JoinColumn(name="location_id")

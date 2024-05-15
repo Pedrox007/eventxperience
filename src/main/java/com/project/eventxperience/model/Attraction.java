@@ -1,8 +1,6 @@
 package com.project.eventxperience.model;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.*;
 import com.project.eventxperience.model.base.BaseModel;
 import com.project.eventxperience.model.base.Event;
 import jakarta.persistence.*;
@@ -20,10 +18,11 @@ public class Attraction extends BaseModel {
     private String name;
 
     @OneToMany(mappedBy = "attraction", fetch = FetchType.EAGER)
+    @JsonBackReference
     protected List<Rating> ratings;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "event_id")
-    @JsonBackReference
+    @JsonIdentityReference(alwaysAsId = true)
     private SportEvent sportEvent;
 }
