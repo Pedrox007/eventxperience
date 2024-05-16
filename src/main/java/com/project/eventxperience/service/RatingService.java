@@ -40,7 +40,7 @@ public class RatingService {
             rating.setRating(RatingValues.valueOf(ratingDTO.getRating()));
             rating.setUser(userRepository.findById(ratingDTO.getUserId()).orElseThrow(() -> new IllegalArgumentException("Usuário não encontrado")));
             rating.setAttraction(attraction.get());
-            userService.addPointsToUser(Long.valueOf(String.valueOf(userRepository.findById(ratingDTO.getUserId()))), 5);
+            userService.addPointsToUser(ratingDTO.getUserId(), 5);
             return ratingRepository.save(rating);
         } catch (DataAccessException e) {
             throw new IllegalStateException("Erro ao salvar ou atualizar avaliação", e);

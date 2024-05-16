@@ -56,10 +56,12 @@ public class User extends BaseModel implements UserDetails {
     @JsonBackReference
     private List<Rating> ratings = new ArrayList<>();
 
-    @OneToMany (mappedBy = "user", fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "user", fetch = FetchType.EAGER)
+    @JsonBackReference
     List<Claim> claims = new ArrayList<>();
 
     @OneToMany (mappedBy = "user", fetch = FetchType.EAGER)
+    @JsonBackReference
     List<Ticket> tickets = new ArrayList<>();
 
     public User() {

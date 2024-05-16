@@ -18,12 +18,10 @@ public class Rating extends BaseModel {
 
     @ManyToOne
     @JoinColumn(name="user_id")
-    @JsonManagedReference
     private User user;
 
     @ManyToOne
     @JoinColumn(name="attraction_id")
-    @JsonManagedReference
     private Attraction attraction;
 
 }

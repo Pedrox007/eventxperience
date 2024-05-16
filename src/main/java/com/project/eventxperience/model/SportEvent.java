@@ -38,7 +38,6 @@ public class SportEvent extends Event {
     List<Ticket> tickets = new ArrayList<>();
 
     @OneToMany(mappedBy = "sportEvent", fetch = FetchType.LAZY)
-    @JsonManagedReference
     protected List<Attraction> attractions;
 
     public SportEvent() {

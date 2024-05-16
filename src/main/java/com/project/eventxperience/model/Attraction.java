@@ -1,6 +1,9 @@
 package com.project.eventxperience.model;
 
-import com.fasterxml.jackson.annotation.*;
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIdentityReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.project.eventxperience.model.base.BaseModel;
 import com.project.eventxperience.model.base.Event;
 import jakarta.persistence.*;
