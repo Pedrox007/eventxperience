@@ -16,7 +16,7 @@ public class UserService {
     public void addPointsToUser(Long userId, int pointsToAdd) {
         try {
             User user = userRepository.findById(userId)
-                    .orElseThrow(() -> new EntityNotFoundException("User not found"));
+                    .orElseThrow(() -> new EntityNotFoundException("Usuario não encontrado"));
 
             int currentPoints = user.getPoints();
             int newPoints = currentPoints + pointsToAdd;
@@ -27,4 +27,5 @@ public class UserService {
             throw new IllegalStateException("Erro ao adicionar pontos ao usuário", e);
         }
     }
+
 }

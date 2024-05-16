@@ -5,6 +5,8 @@ import jakarta.persistence.*;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
+import java.util.List;
+
 
 @EqualsAndHashCode(callSuper = true)
 @Entity
@@ -21,4 +23,7 @@ public class Claim extends BaseModel {
     @ManyToOne
     @JoinColumn(name="reward_id")
     private Reward reward;
+
+    public Claim() {
+    }
 }

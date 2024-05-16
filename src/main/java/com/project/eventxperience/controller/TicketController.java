@@ -62,7 +62,7 @@ public class TicketController {
             }
 
             ticketService.confirmAttendance(sportEvent, userId, organizer);
-            userService.addPointsToUser(userId, 5);
+            userService.addPointsToUser(userId, 10);
 
             return ResponseEntity.ok("Presença confirmada com sucesso.O usuário foi recompensado com 5 pontos.");
         } catch (EntityNotFoundException e) {

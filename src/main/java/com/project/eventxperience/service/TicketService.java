@@ -6,6 +6,7 @@ import com.project.eventxperience.model.Ticket;
 import com.project.eventxperience.model.User;
 import com.project.eventxperience.repository.SportEventRepository;
 import com.project.eventxperience.repository.TicketRepository;
+import com.project.eventxperience.utils.EventUtils;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
@@ -54,7 +55,7 @@ public class TicketService {
                 throw new IllegalArgumentException("O evento esportivo ou o criador do evento não foi encontrado.");
             }
 
-            if (!isOrganizerOfEvent(sportEvent, organizer)) {
+            if (!EventUtils.isOrganizerOfEvent(sportEvent, organizer)) {
                 throw new IllegalArgumentException("Você não tem permissão para confirmar a presença neste evento.");
             }
 
@@ -69,20 +70,6 @@ public class TicketService {
         } catch (DataAccessException e) {
             throw new IllegalStateException("Erro ao confirmar presença no evento", e);
         }
-    }
-
-    private boolean isOrganizerOfEvent(SportEvent event, User user) {
-        List<Role> roles = user.getRoles();
-
-        if (event.getCreator() != null && event.getCreator().getId().equals(user.getId())) {
-            for (Role role : roles) {
-                if ("ROLE_ORGANIZER".equals(role.getName())) {
-                    return true;
-                }
-            }
-        }
-
-        return false;
     }
 
     public boolean hasConfirmedAttendance(SportEvent sportEvent, Long userId) {
