@@ -63,7 +63,7 @@ public class DataInitializer implements CommandLineRunner {
             User user1 = new User();
             user1.setUsername("carol");
             user1.setEmail("carol@example.com");
-            user1.setCpf("98765432100");
+            user1.setCpf("45709069078");
             user1.setPhone("991598681");
             user1.setPassword(passwordEncoder.encode("password1"));
             user1.setRoles(Arrays.asList(roleUser.orElse(null), roleOrganizer.orElse(null)));
@@ -71,7 +71,7 @@ public class DataInitializer implements CommandLineRunner {
             User user2 = new User();
             user2.setUsername("pedro");
             user2.setEmail("pedro@example.com");
-            user2.setCpf("12334567899");
+            user2.setCpf("02009695011");
             user2.setPhone("991497681");
             user2.setPassword(passwordEncoder.encode("password2"));
             user2.setRoles(Collections.singletonList(roleOrganizer.orElse(null)));
@@ -79,7 +79,7 @@ public class DataInitializer implements CommandLineRunner {
             User user3 = new User();
             user3.setUsername("bruno");
             user3.setEmail("bruno@example.com");
-            user3.setCpf("12334567898");
+            user3.setCpf("23656890005");
             user3.setPhone("991497681");
             user3.setPassword(passwordEncoder.encode("password3"));
             user3.setRoles(Collections.singletonList(roleUser.orElse(null)));

@@ -61,32 +61,32 @@ public class RewardService {
         }
     }
 
-    public void requestReward(User user, RewardDTO rewardDTO) {
-        // Buscar a recompensa pelo ID
-        Reward reward = rewardRepository.findById(rewardDTO.getRewardId())
-                .orElseThrow(() -> new EntityNotFoundException("Recompensa não encontrada com o ID: " + rewardDTO.getRewardId()));
-
-        // Criar uma nova solicitação de recompensa
-        Claim claim = new Claim();
-        claim.setUser(user);
-        claim.setReward(reward);
-        claim.setConfirmed(false); // Define como não confirmado inicialmente
-
-        // Salvar a solicitação de recompensa
+    public Long requestReward(User user, RewardDTO rewardDTO) {
         try {
-            claimService.saveClaim(claim);
+            // Buscar a recompensa pelo ID
+            Reward reward = rewardRepository.findById(rewardDTO.getRewardId())
+                    .orElseThrow(() -> new EntityNotFoundException("Recompensa não encontrada com o ID: " + rewardDTO.getRewardId()));
+
+            // Criar uma nova solicitação de recompensa
+            Claim claim = new Claim();
+            claim.setUser(user);
+            claim.setReward(reward);
+            claim.setConfirmed(false); // Define como não confirmado inicialmente
+
+            // Salvar a solicitação de recompensa
+            Claim savedClaim = claimService.saveClaim(claim);
+
+            return savedClaim.getId();
         } catch (Exception e) {
             throw new IllegalStateException("Erro ao salvar a solicitação de recompensa", e);
         }
     }
 
-    public void confirmReward(Long claimId, User organizer) {
+    public Claim confirmReward(Long claimId, User organizer) {
         try {
-            // Busca a reivindicação pelo ID
             Claim claim = claimService.findById(claimId)
                     .orElseThrow(() -> new EntityNotFoundException("Reivindicação não encontrada com o ID: " + claimId));
 
-            // Acessa os eventos associados à recompensa da reivindicação
             List<SportEvent> events = claim.getReward().getSportEvents();
 
             // Verifica se o usuário é o organizador de pelo menos um dos eventos associados à recompensa
@@ -101,7 +101,7 @@ public class RewardService {
             if (!claim.isConfirmed()) {
                 // Confirma a reivindicação
                 claim.setConfirmed(true);
-                claimService.saveClaim(claim);
+                return claimService.saveClaim(claim);
             } else {
                 throw new IllegalStateException("A recompensa já foi retirada.");
             }

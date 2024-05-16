@@ -54,21 +54,16 @@ public class TicketController {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         User organizer = (User) authentication.getPrincipal();
 
-        try {
-            SportEvent sportEvent = sportEventService.findById(eventId);
+        SportEvent sportEvent = sportEventService.findById(eventId);
 
-            if (ticketService.hasConfirmedAttendance(sportEvent, userId)) {
-                return ResponseEntity.badRequest().body("Usuário já foi confirmado neste evento.");
-            }
-
-            ticketService.confirmAttendance(sportEvent, userId, organizer);
-            userService.addPointsToUser(userId, 10);
-
-            return ResponseEntity.ok("Presença confirmada com sucesso.O usuário foi recompensado com 5 pontos.");
-        } catch (EntityNotFoundException e) {
-            return ResponseEntity.notFound().build();
-        } catch (IllegalArgumentException e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
+        if (ticketService.hasConfirmedAttendance(sportEvent, userId)) {
+            return ResponseEntity.badRequest().body("Usuário já foi confirmado neste evento.");
         }
+
+        ticketService.confirmAttendance(sportEvent, userId, organizer);
+        userService.addPointsToUser(userId, 10);
+
+        return ResponseEntity.ok("Presença confirmada com sucesso.O usuário foi recompensado com 5 pontos.");
+
     }
 }

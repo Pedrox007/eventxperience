@@ -27,12 +27,8 @@ public class RewardController {
 
     @PostMapping("/add")
     public ResponseEntity<Reward> addReward(@RequestBody Reward reward) {
-        try {
-            Reward savedReward = rewardService.saveOrUpdate(reward);
-            return ResponseEntity.ok(savedReward);
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
-        }
+        Reward savedReward = rewardService.saveOrUpdate(reward);
+        return ResponseEntity.ok(savedReward);
     }
 
 
@@ -45,23 +41,19 @@ public class RewardController {
 
     @PutMapping("/{id}")
     public ResponseEntity<Reward> updateReward(@PathVariable Long id, @RequestBody Reward reward) {
-        try {
-            Optional<Reward> existingRewardOptional = rewardService.findById(id);
+        Optional<Reward> existingRewardOptional = rewardService.findById(id);
 
-            if (existingRewardOptional.isPresent()) {
-                Reward existingReward = existingRewardOptional.get();
-                existingReward.setName(reward.getName());
-                existingReward.setDescription(reward.getDescription());
-                existingReward.setPrice(reward.getPrice());
-                existingReward.setSportEvents(reward.getSportEvents());
-                existingReward.setClaims(reward.getClaims());
-                Reward updatedReward = rewardService.saveOrUpdate(existingReward);
-                return ResponseEntity.ok(updatedReward);
-            } else {
-                return ResponseEntity.notFound().build();
-            }
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        if (existingRewardOptional.isPresent()) {
+            Reward existingReward = existingRewardOptional.get();
+            existingReward.setName(reward.getName());
+            existingReward.setDescription(reward.getDescription());
+            existingReward.setPrice(reward.getPrice());
+            existingReward.setSportEvents(reward.getSportEvents());
+            existingReward.setClaims(reward.getClaims());
+            Reward updatedReward = rewardService.saveOrUpdate(existingReward);
+            return ResponseEntity.ok(updatedReward);
+        } else {
+            return ResponseEntity.notFound().build();
         }
     }
 
@@ -74,45 +66,21 @@ public class RewardController {
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteReward(@PathVariable Long id) {
-        try {
             rewardService.deleteById(id);
             return ResponseEntity.noContent().build();
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
-        }
     }
 
     @PostMapping("/claim")
     public ResponseEntity<Long> requestReward(@RequestBody RewardDTO requestRewardDTO, Authentication authentication) {
-        if (authentication == null || !authentication.isAuthenticated()) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
-        }
-
         User user = (User) authentication.getPrincipal();
-
-        try {
-            rewardService.requestReward(user, requestRewardDTO);
-            return ResponseEntity.ok().build();
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
-        }
+        Long claimId = rewardService.requestReward(user, requestRewardDTO);
+        return ResponseEntity.ok(claimId);
     }
     @PostMapping("/confirm/{claimId}")
     public ResponseEntity<?> confirmReward(@PathVariable Long claimId, Authentication authentication) {
-        if (authentication == null || !authentication.isAuthenticated()) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
-        }
-
         User organizer = (User) authentication.getPrincipal();
-
-        try {
-            rewardService.confirmReward(claimId, organizer);
-            return ResponseEntity.ok().build();
-        } catch (IllegalStateException e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
-        }
+        Claim confirmedClaim = rewardService.confirmReward(claimId, organizer);
+        return ResponseEntity.ok(confirmedClaim);
     }
 }
 
