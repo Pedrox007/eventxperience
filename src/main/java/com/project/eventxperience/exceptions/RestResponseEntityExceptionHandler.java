@@ -36,15 +36,6 @@ public class RestResponseEntityExceptionHandler {
                 new HttpHeaders(), HttpStatus.BAD_REQUEST);
     }
 
-    @ExceptionHandler(value = { InvalidDataAccessApiUsageException.class })
-    protected ResponseEntity<ApiErrorException> handleInvalidDataAccessApiUsageException(
-            RuntimeException ex, WebRequest request) {
-        String response = ex.getCause().getMessage();
-
-        return new ResponseEntity<>(new ApiErrorException(List.of(response)),
-                new HttpHeaders(), HttpStatus.BAD_REQUEST);
-    }
-
     @ExceptionHandler(value = { MethodArgumentNotValidException.class })
     protected ResponseEntity<ApiErrorException> handleMethodArgumentNotValidException(
             MethodArgumentNotValidException ex, WebRequest request) {
