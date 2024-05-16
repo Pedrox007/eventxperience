@@ -1,9 +1,6 @@
 package com.project.eventxperience.config;
 
-import com.project.eventxperience.model.Role;
-import com.project.eventxperience.model.Sport;
-import com.project.eventxperience.model.SportEvent; 
-import com.project.eventxperience.model.User;
+import com.project.eventxperience.model.*;
 import com.project.eventxperience.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
@@ -21,17 +18,18 @@ public class DataInitializer implements CommandLineRunner {
     private final UserRepository userRepository;
     private final SportRepository sportRepository;
     private final SportEventRepository sportEventRepository;
-
     private final TicketRepository ticketRepository;
+    private final AttractionRepository attractionRepository;
     private final PasswordEncoder passwordEncoder;
 
     @Autowired
-    public DataInitializer(RoleRepository roleRepository, UserRepository userRepository, SportRepository sportRepository, SportEventRepository sportEventRepository, TicketRepository ticketRepository, PasswordEncoder passwordEncoder) {
+    public DataInitializer(RoleRepository roleRepository, UserRepository userRepository, SportRepository sportRepository, SportEventRepository sportEventRepository, TicketRepository ticketRepository, AttractionRepository attractionRepository, PasswordEncoder passwordEncoder) {
         this.roleRepository = roleRepository;
         this.userRepository = userRepository;
         this.sportRepository = sportRepository;
         this.sportEventRepository = sportEventRepository;
         this.ticketRepository = ticketRepository;
+        this.attractionRepository = attractionRepository;
         this.passwordEncoder = passwordEncoder;
     }
 
@@ -144,6 +142,24 @@ public class DataInitializer implements CommandLineRunner {
             fourthEvent.setSport(sport2.orElse(null));
 
             sportEventRepository.saveAll(Arrays.asList(firstEvent, secondEvent, thirdEvent, fourthEvent));
+
+            Attraction attraction1 = new Attraction();
+            attraction1.setName("Praia de Copacabana");
+            attraction1.setSportEvent(firstEvent);
+
+            Attraction attraction2 = new Attraction();
+            attraction2.setName("Campo de futebol");
+            attraction2.setSportEvent(secondEvent);
+
+            Attraction attraction3 = new Attraction();
+            attraction3.setName("Quadra de basquete");
+            attraction3.setSportEvent(thirdEvent);
+
+            Attraction attraction4 = new Attraction();
+            attraction4.setName("Parque da cidade");
+            attraction4.setSportEvent(fourthEvent);
+
+            attractionRepository.saveAll(Arrays.asList(attraction1, attraction2, attraction3, attraction4));
         }
     }
 }
