@@ -1,5 +1,6 @@
 package com.project.eventxperience.model;
 
+import com.fasterxml.jackson.annotation.JsonIdentityReference;
 import com.project.eventxperience.model.base.BaseModel;
 import com.project.eventxperience.model.base.Event;
 import jakarta.persistence.*;
@@ -23,6 +24,7 @@ public class Ticket extends BaseModel {
 
     @ManyToOne
     @JoinColumn(name="user_id")
+    @JsonIdentityReference
     private User user;
 
     @ManyToOne
