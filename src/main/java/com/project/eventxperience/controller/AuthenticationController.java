@@ -11,6 +11,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.HashMap;
+
 @RequestMapping("/auth")
 @RestController
 public class AuthenticationController {
@@ -33,8 +35,11 @@ public class AuthenticationController {
     @PostMapping("/login")
     public ResponseEntity<LoginResponse> authenticate(@RequestBody User user) {
         User authenticatedUser = authenticationService.authenticate(user);
-
-        String jwtToken = jwtService.generateToken(authenticatedUser);
+        HashMap<String, Object> extraClaims = new HashMap<>();
+        extraClaims.put("userId", authenticatedUser.getId());
+        extraClaims.put("email", authenticatedUser.getEmail());
+        extraClaims.put("roles", authenticatedUser.getAuthorities());
+        String jwtToken = jwtService.generateToken(extraClaims, authenticatedUser);
 
         LoginResponse loginResponse = new LoginResponse();
         loginResponse.setToken(jwtToken);
