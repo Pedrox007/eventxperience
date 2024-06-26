@@ -1,7 +1,7 @@
 package com.project.eventxperience.framework.controller;
 
-import com.project.eventxperience.framework.sportevent.model.Sport;
 import com.project.eventxperience.framework.service.SportService;
+import com.project.eventxperience.sportevent.model.Sport;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

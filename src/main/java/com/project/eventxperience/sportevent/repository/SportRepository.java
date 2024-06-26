@@ -1,8 +1,7 @@
-package com.project.eventxperience.framework.repository;
+package com.project.eventxperience.sportevent.repository;
 
-import com.project.eventxperience.framework.sportevent.model.Sport;
+import com.project.eventxperience.sportevent.model.Sport;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 
 import java.util.Optional;

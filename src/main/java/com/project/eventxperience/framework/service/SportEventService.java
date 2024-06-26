@@ -1,20 +1,18 @@
 package com.project.eventxperience.framework.service;
 
-import com.project.eventxperience.framework.sportevent.model.Sport;
 import com.project.eventxperience.framework.model.User;
-import com.project.eventxperience.framework.sportevent.model.SportEvent;
 import com.project.eventxperience.framework.model.Ticket;
 import com.project.eventxperience.framework.model.dto.SportEventDTO;
-import com.project.eventxperience.framework.repository.SportEventRepository;
-import com.project.eventxperience.framework.repository.SportRepository;
+import com.project.eventxperience.sportevent.model.Sport;
+import com.project.eventxperience.sportevent.model.SportEvent;
+import com.project.eventxperience.sportevent.repository.SportEventRepository;
+import com.project.eventxperience.sportevent.repository.SportRepository;
 import com.project.eventxperience.framework.repository.TicketRepository;
 import com.project.eventxperience.framework.repository.UserRepository;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Service;
-import org.springframework.web.server.ResponseStatusException;
-import org.springframework.http.HttpStatus;
 
 import java.util.Collections;
 import java.util.List;
@@ -76,11 +74,11 @@ public class SportEventService {
     public List<User> getAllParticipantsByEventId(Long eventId) {
         try {
             SportEvent event = sportEventRepository.findById(eventId).orElse(null);
-            if (event != null) {
-                return event.getTickets().stream()
-                        .map(Ticket::getUser)
-                        .collect(Collectors.toList());
-            }
+//            if (event != null) {
+//                return event.getTickets().stream()
+//                        .map(Ticket::getUser)
+//                        .collect(Collectors.toList());
+//            }
             return Collections.emptyList();
         } catch (DataAccessException e) {
             throw new IllegalStateException("Erro ao buscar participantes do evento por ID", e);

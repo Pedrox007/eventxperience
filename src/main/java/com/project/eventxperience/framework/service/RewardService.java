@@ -1,12 +1,13 @@
 package com.project.eventxperience.framework.service;
 
 import com.project.eventxperience.framework.model.Claim;
+import com.project.eventxperience.framework.model.Event;
 import com.project.eventxperience.framework.model.Reward;
-import com.project.eventxperience.framework.sportevent.model.SportEvent;
 import com.project.eventxperience.framework.model.dto.RewardDTO;
 import com.project.eventxperience.framework.model.User;
-import com.project.eventxperience..frameworkrepository.RewardRepository;
+import com.project.eventxperience.framework.repository.RewardRepository;
 import com.project.eventxperience.framework.utils.EventUtils;
+import com.project.eventxperience.sportevent.model.SportEvent;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
@@ -86,15 +87,15 @@ public class RewardService {
             Claim claim = claimService.findById(claimId)
                     .orElseThrow(() -> new EntityNotFoundException("Reivindicação não encontrada com o ID: " + claimId));
 
-            List<SportEvent> events = claim.getReward().getSportEvents();
+            List<Event> events = claim.getReward().getEvents();
 
             // Verifica se o usuário é o organizador de pelo menos um dos eventos associados à recompensa
-            boolean isOrganizer = events.stream()
-                    .anyMatch(event -> EventUtils.isOrganizerOfEvent(event, organizer));
+//            boolean isOrganizer = events.stream()
+//                    .anyMatch(event -> EventUtils.isOrganizerOfEvent(event, organizer));
 
-            if (!isOrganizer) {
-                throw new IllegalStateException("O usuário não é um organizador de nenhum dos eventos associados à recompensa.");
-            }
+//            if (!isOrganizer) {
+//                throw new IllegalStateException("O usuário não é um organizador de nenhum dos eventos associados à recompensa.");
+//            }
 
             // Verifica se a reivindicação ainda não foi confirmada
             if (!claim.isConfirmed()) {

@@ -1,6 +1,6 @@
 package com.project.eventxperience.sportevent.model;
 
-import com.project.eventxperience.model.base.BaseModel;
+import com.project.eventxperience.framework.model.Attraction;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Table;

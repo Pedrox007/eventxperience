@@ -4,7 +4,7 @@ import com.project.eventxperience.framework.model.Ticket;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface TicketRepository extends JpaRepository<Ticket, Long> {
-    Ticket findBySportEventIdAndUserId(Long eventId, Long userId);
-    int countBySportEventIdAndConfirmedTrue(Long eventId);
+    Ticket findByEventIdAndUserId(Long eventId, Long userId);
+    int countByEventIdAndConfirmedTrue(Long eventId);
 }
 

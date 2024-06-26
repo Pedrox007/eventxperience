@@ -1,9 +1,9 @@
 package com.project.eventxperience.framework.service;
 
-import com.project.eventxperience.framework.sportevent.model.SportEvent;
 import com.project.eventxperience.framework.model.Ticket;
 import com.project.eventxperience.framework.model.User;
-import com.project.eventxperience.framework.repository.SportEventRepository;
+import com.project.eventxperience.sportevent.model.SportEvent;
+import com.project.eventxperience.sportevent.repository.SportEventRepository;
 import com.project.eventxperience.framework.repository.TicketRepository;
 import com.project.eventxperience.framework.utils.EventUtils;
 import jakarta.persistence.EntityNotFoundException;
@@ -27,7 +27,7 @@ public class TicketService {
         try {
             // Verifica se o usuário já possui um ticket para este evento
             boolean hasTicket = user.getTickets().stream()
-                    .anyMatch(ticket -> ticket.getSportEvent().getId().equals(sportEvent.getId()));
+                    .anyMatch(ticket -> ticket.getEvent().getId().equals(sportEvent.getId()));
 
             if (hasTicket) {
                 throw new IllegalArgumentException("O usuário já possui um ticket para este evento.");
@@ -36,7 +36,7 @@ public class TicketService {
             Ticket ticket = new Ticket();
             ticket.setPrice(sportEvent.getTicketPrice());
             ticket.setUser(user);
-            ticket.setSportEvent(sportEvent);
+            ticket.setEvent(sportEvent);
             ticket.setConfirmed(false);
 
             return ticketRepository.save(ticket);
@@ -55,7 +55,7 @@ public class TicketService {
                 throw new IllegalArgumentException("Você não tem permissão para confirmar a presença neste evento.");
             }
 
-            Ticket ticket = ticketRepository.findBySportEventIdAndUserId(sportEvent.getId(), userId);
+            Ticket ticket = ticketRepository.findByEventIdAndUserId(sportEvent.getId(), userId);
 
             if (ticket == null) {
                 throw new EntityNotFoundException("Ticket não encontrado.");
@@ -69,11 +69,11 @@ public class TicketService {
     }
 
     public boolean hasConfirmedAttendance(SportEvent sportEvent, Long userId) {
-        Ticket ticket = ticketRepository.findBySportEventIdAndUserId(sportEvent.getId(), userId);
+        Ticket ticket = ticketRepository.findByEventIdAndUserId(sportEvent.getId(), userId);
         return ticket != null && ticket.isConfirmed();
     }
 
     public int countConfirmedUsersForEvent(Long eventId) {
-        return ticketRepository.countBySportEventIdAndConfirmedTrue(eventId);
+        return ticketRepository.countByEventIdAndConfirmedTrue(eventId);
     }
 }

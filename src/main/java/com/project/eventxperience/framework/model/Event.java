@@ -1,12 +1,16 @@
 package com.project.eventxperience.framework.model;
 
 import com.project.eventxperience.framework.model.User;
+import com.project.eventxperience.framework.model.base.BaseModel;
 import jakarta.persistence.*;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 import java.util.Date;
 
+@EqualsAndHashCode(callSuper = true)
 @Entity
-@Table
+@Table(name = "db_event")
 @Inheritance( strategy = InheritanceType.JOINED )
 @Data
 public class Event extends BaseModel {

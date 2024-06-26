@@ -15,7 +15,7 @@ import java.util.List;
 @Entity
 @Table(name = "db_sport_event")
 @Data
-@PrimaryKeyJoinColumn(referencedColumnName="sid")
+@PrimaryKeyJoinColumn(referencedColumnName="id")
 public class SportEvent extends Event {
     @ManyToOne
     @JoinColumn(name = "sport_id")

@@ -1,7 +1,7 @@
 package com.project.eventxperience.framework.service;
 
-import com.project.eventxperience.framework.sportevent.model.Sport;
-import com.project.eventxperience.framework.repository.SportRepository;
+import com.project.eventxperience.sportevent.model.Sport;
+import com.project.eventxperience.sportevent.repository.SportRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Service;

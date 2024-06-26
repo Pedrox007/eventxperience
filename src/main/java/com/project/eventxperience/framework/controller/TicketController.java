@@ -1,11 +1,11 @@
 package com.project.eventxperience.framework.controller;
 
-import com.project.eventxperience.framework.sportevent.model.SportEvent;
 import com.project.eventxperience.framework.model.Ticket;
 import com.project.eventxperience.framework.model.User;
 import com.project.eventxperience.framework.service.SportEventService;
 import com.project.eventxperience.framework.service.TicketService;
 import com.project.eventxperience.framework.service.UserService;
+import com.project.eventxperience.sportevent.model.SportEvent;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;

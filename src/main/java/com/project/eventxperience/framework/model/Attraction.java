@@ -22,7 +22,7 @@ public class Attraction extends BaseModel {
 
     @OneToMany(mappedBy = "attraction", fetch = FetchType.EAGER)
     @JsonBackReference
-    protected List<Rating> ratings;
+    protected List<Review> ratings;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "event_id")

@@ -1,8 +1,8 @@
 package com.project.eventxperience.framework.utils;
 
-import com.project.eventxperience.framework.sportevent.model.SportEvent;
 import com.project.eventxperience.framework.model.User;
 import com.project.eventxperience.framework.model.Role;
+import com.project.eventxperience.sportevent.model.SportEvent;
 
 import java.util.List;
 

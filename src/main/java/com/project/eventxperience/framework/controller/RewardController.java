@@ -48,7 +48,7 @@ public class RewardController {
             existingReward.setName(reward.getName());
             existingReward.setDescription(reward.getDescription());
             existingReward.setPrice(reward.getPrice());
-            existingReward.setSportEvents(reward.getSportEvents());
+            existingReward.setEvents(reward.getEvents());
             existingReward.setClaims(reward.getClaims());
             Reward updatedReward = rewardService.saveOrUpdate(existingReward);
             return ResponseEntity.ok(updatedReward);

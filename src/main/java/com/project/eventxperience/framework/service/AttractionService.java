@@ -1,10 +1,10 @@
 package com.project.eventxperience.framework.service;
 
 import com.project.eventxperience.framework.model.Attraction;
-import com.project.eventxperience.framework.sportevent.model.SportEvent;
 import com.project.eventxperience.framework.model.dto.AttractionDTO;
 import com.project.eventxperience.framework.repository.AttractionRepository;
-import com.project.eventxperience.framework.repository.SportEventRepository;
+import com.project.eventxperience.sportevent.model.SportEvent;
+import com.project.eventxperience.sportevent.repository.SportEventRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
@@ -41,7 +41,7 @@ public class AttractionService {
                 Attraction attraction = new Attraction();
                 attraction.setId(attractionDTO.getId());
                 attraction.setName(attractionDTO.getName());
-                attraction.setSportEvent(event.get());
+                attraction.setEvent(event.get());
                 attractions.add(attraction);
             }
 
@@ -69,7 +69,7 @@ public class AttractionService {
         try {
             for (Long attractionId : attractionsIds) {
                 attraction = attractionRepository.findById(attractionId).orElseThrow(() -> new IllegalArgumentException("Atração não encontrada"));
-                if (!attraction.getSportEvent().getId().equals(id)) {
+                if (!attraction.getEvent().getId().equals(id)) {
                     throw new IllegalArgumentException("Atração não encontrada nesse evento");
                 }
                 attractionRepository.deleteById(attractionId);

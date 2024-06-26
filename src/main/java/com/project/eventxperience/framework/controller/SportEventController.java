@@ -1,13 +1,13 @@
 package com.project.eventxperience.framework.controller;
 
 import com.project.eventxperience.framework.model.Attraction;
-import com.project.eventxperience.framework.sportevent.model.SportEvent;
 import com.project.eventxperience.framework.model.User;
 import com.project.eventxperience.framework.model.dto.AttractionDTO;
 import com.project.eventxperience.framework.model.dto.SportEventDTO;
 import com.project.eventxperience.framework.service.AttractionService;
 import com.project.eventxperience.framework.service.SportEventService;
 import com.project.eventxperience.framework.service.TicketService;
+import com.project.eventxperience.sportevent.model.SportEvent;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
