@@ -55,12 +55,12 @@ public class ReviewController {
         return ResponseEntity.ok(ratings);
     }
 
-    @GetMapping("/event/{eventId}")
-    public ResponseEntity<Iterable<Review>> getAllRatingsByEventId(@PathVariable Long eventId) {
-        Iterable<Review> ratings = ratingService.findAllByEventId(eventId);
-
-        return ResponseEntity.ok(ratings);
-    }
+//    @GetMapping("/event/{eventId}")
+//    public ResponseEntity<Iterable<Review>> getAllRatingsByEventId(@PathVariable Long eventId) {
+//        Iterable<Review> ratings = ratingService.findAllByEventId(eventId);
+//
+//        return ResponseEntity.ok(ratings);
+//    }
 
     @GetMapping("/{id}")
     public ResponseEntity<Optional<Review>> getRatingById(@PathVariable Long id) {

@@ -32,6 +32,7 @@ public class SportEventResponseDTO implements BaseDTO<SportEvent> {
 
     @Override
     public void parseToDTO(SportEvent sportEvent) {
+        setId(sportEvent.getId());
         setName(sportEvent.getName());
         setDescription(sportEvent.getDescription());
         setEventDate(sportEvent.getEventDate());
@@ -44,6 +45,6 @@ public class SportEventResponseDTO implements BaseDTO<SportEvent> {
         sportDTO.setName(sportEvent.getSport().getName());
         sportDTO.setDescription(sportEvent.getSport().getDescription());
         sportDTO.setParticipants(sportEvent.getSport().getParticipants());
-        setSport(sportDTO);        
+        setSport(sportDTO);
     }
 }

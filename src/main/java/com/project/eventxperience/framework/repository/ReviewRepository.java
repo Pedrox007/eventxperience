@@ -10,7 +10,4 @@ public interface ReviewRepository extends JpaRepository<Review, Long> {
     List<Review> findByUserId(Long user_id);
 
     List<Review> findByAttractionId(Long attraction_id);
-
-    @Query("SELECT r FROM Review r JOIN Attraction a ON r.attraction.id = a.id WHERE a.event.id = ?1")
-    List<Review> findByEventId(Long eventId);
 }

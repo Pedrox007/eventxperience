@@ -72,13 +72,13 @@ public class ReviewService {
         }
     }
 
-    public List<Review> findAllByEventId(Long eventId) {
-        try {
-            return ratingRepository.findByEventId(eventId);
-        } catch (DataAccessException e) {
-            throw new IllegalStateException("Erro ao buscar todas as avaliações", e);
-        }
-    }
+//    public List<Review> findAllByEventId(Long eventId) {
+//        try {
+//            return ratingRepository.findByEventId(eventId);
+//        } catch (DataAccessException e) {
+//            throw new IllegalStateException("Erro ao buscar todas as avaliações", e);
+//        }
+//    }
 
     public Optional<Review> findById(Long id) {
         try {

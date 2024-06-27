@@ -86,7 +86,7 @@ public class SportEventService implements EventServiceInterface<SportEventReques
 
     @Override
     public List<SportEventResponseDTO> listEvent() {
-        List<SportEvent> sportEvents = sportEventRepository.findAll();
+        List<SportEvent> sportEvents = (List<SportEvent>) sportEventRepository.findAll();
 
         return sportEvents.stream().map((sportEvent) -> {
             SportEventResponseDTO sportEventResponseDTO = new SportEventResponseDTO();

@@ -9,6 +9,4 @@ import java.util.List;
 
 @Repository
 public interface AttractionRepository extends CrudRepository<Attraction, Long> {
-    @Query("SELECT a FROM Attraction a WHERE a.event.id = ?1")
-    List<Attraction> findAllByEventId(Long eventId);
 }
