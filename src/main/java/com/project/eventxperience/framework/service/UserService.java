@@ -13,6 +13,9 @@ public class UserService {
     @Autowired
     UserRepository userRepository;
 
+    @Autowired
+    private JwtService jwtService;
+
     public void addPointsToUser(Long userId, int pointsToAdd) {
         try {
             User user = userRepository.findById(userId)
@@ -25,6 +28,15 @@ public class UserService {
             userRepository.save(user);
         } catch (DataAccessException e) {
             throw new IllegalStateException("Erro ao adicionar pontos ao usuário", e);
+        }
+    }
+
+    public User getUserByToken(String token) {
+        try {
+            return userRepository.findByUsername(jwtService.extractUsername(token)).
+                    orElseThrow(() -> new EntityNotFoundException("Usuário não encontrado"));
+        } catch (DataAccessException e) {
+            throw new IllegalStateException("Erro ao buscar usuário pelo token", e);
         }
     }
 

@@ -7,8 +7,12 @@ import com.project.eventxperience.framework.model.enums.ReviewValues;
 import com.project.eventxperience.framework.repository.AttractionRepository;
 import com.project.eventxperience.framework.repository.ReviewRepository;
 import com.project.eventxperience.framework.repository.UserRepository;
+
+import com.project.eventxperience.framework.service.base.AttractionReviewStrategyInterface;
+import com.project.eventxperience.framework.service.base.UserPointStrategyInterface;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -26,6 +30,9 @@ public class ReviewService {
     @Autowired
     private UserService userService;
 
+    private AttractionReviewStrategyInterface attractionStrategy;
+    private UserPointStrategyInterface userPointStrategy;
+
     public Review saveRating(RatingDTO ratingDTO) {
         try {
             Optional<Attraction> attraction = attractionRepository.findById(ratingDTO.getAttractionId());
@@ -38,7 +45,7 @@ public class ReviewService {
             rating.setRating(ReviewValues.valueOf(ratingDTO.getRating()));
             rating.setUser(userRepository.findById(ratingDTO.getUserId()).orElseThrow(() -> new IllegalArgumentException("Usuário não encontrado")));
             rating.setAttraction(attraction.get());
-            userService.addPointsToUser(ratingDTO.getUserId(), 5);
+            userService.addPointsToUser(ratingDTO.getUserId(), attractionStrategy.execute());
             return ratingRepository.save(rating);
         } catch (DataAccessException e) {
             throw new IllegalStateException("Erro ao salvar ou atualizar avaliação", e);
@@ -86,5 +93,9 @@ public class ReviewService {
         } catch (DataAccessException e) {
             throw new IllegalStateException("Erro ao buscar avaliação por ID", e);
         }
+    }
+
+    public int createStrategy(AttractionReviewStrategyInterface attractionStrategy) {
+        return attractionStrategy.execute();
     }
 }

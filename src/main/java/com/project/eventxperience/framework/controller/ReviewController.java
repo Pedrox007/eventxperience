@@ -13,8 +13,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("/ratings")
-public class ReviewController {
+public abstract class ReviewController {
     private ReviewService ratingService;
 
     @Autowired
