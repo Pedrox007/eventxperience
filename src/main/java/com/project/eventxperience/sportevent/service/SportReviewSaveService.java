@@ -17,7 +17,7 @@ import java.util.Optional;
 
 
 @Service
-public class SportReviewSaveSaveService implements AttractionReviewSaveStrategy {
+public class SportReviewSaveService implements AttractionReviewSaveStrategy {
 
     @Autowired
     private UserService userService;
