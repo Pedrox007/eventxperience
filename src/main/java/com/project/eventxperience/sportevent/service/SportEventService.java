@@ -1,6 +1,7 @@
 package com.project.eventxperience.sportevent.service;
 
 import com.project.eventxperience.framework.model.Event;
+import com.project.eventxperience.framework.model.User;
 import com.project.eventxperience.framework.repository.EventRepository;
 import com.project.eventxperience.framework.service.base.EventServiceInterface;
 import com.project.eventxperience.sportevent.model.Sport;
@@ -29,11 +30,12 @@ public class SportEventService implements EventServiceInterface<SportEventReques
     private EventRepository eventRepository;
 
     @Override
-    public SportEventResponseDTO saveEvent(SportEventRequestDTO sportEventRequestDTO) {
+    public SportEventResponseDTO saveEvent(User authenticatedUser, SportEventRequestDTO sportEventRequestDTO) {
         Optional<Sport> sport = Optional.ofNullable(sportRepository.findById(sportEventRequestDTO.getSportId()).orElseThrow(() -> new EntityNotFoundException("Sport does not exist!")));
 
         SportEvent sportEvent = sportEventRequestDTO.parseToEntity();
         sport.ifPresent(sportEvent::setSport);
+        sportEvent.setCreator(authenticatedUser);
 
         SportEventResponseDTO sportEventResponseDTO = new SportEventResponseDTO();
         sportEventResponseDTO.parseToDTO(sportEventRepository.save(sportEvent));
@@ -70,7 +72,7 @@ public class SportEventService implements EventServiceInterface<SportEventReques
     }
 
     @Override
-    public SportEventResponseDTO updateEvent(SportEventRequestDTO sportEventRequestDTO, Long id) {
+    public SportEventResponseDTO updateEvent(User authenticatedUser, SportEventRequestDTO sportEventRequestDTO, Long id) {
         if (sportEventRepository.findById(id).isEmpty()) {
             throw new EntityNotFoundException("Sport Event not found!");
         }
@@ -82,6 +84,7 @@ public class SportEventService implements EventServiceInterface<SportEventReques
         SportEvent sportEvent = sportEventRequestDTO.parseToEntity();
         sportEvent.setId(id);
         sportEvent.setSport(sport.get());
+        sportEvent.setCreator(authenticatedUser);
 
         sportEventRepository.save(sportEvent);
 

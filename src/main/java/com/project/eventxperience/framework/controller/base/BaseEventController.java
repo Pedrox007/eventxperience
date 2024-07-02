@@ -1,7 +1,9 @@
 package com.project.eventxperience.framework.controller.base;
 
+import com.project.eventxperience.framework.model.User;
 import com.project.eventxperience.framework.service.base.EventServiceInterface;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -35,15 +37,17 @@ public abstract class BaseEventController<RequestDTO, ResponseDTO> {
     }
 
     @PostMapping("/save")
-    public ResponseEntity<ResponseDTO> saveEvent(@RequestBody RequestDTO requestDTO) {
-        ResponseDTO eventObject = eventService.saveEvent(requestDTO);
+    public ResponseEntity<ResponseDTO> saveEvent(Authentication authentication, @RequestBody RequestDTO requestDTO) {
+        User currentUser = (User) authentication.getPrincipal();
+        ResponseDTO eventObject = eventService.saveEvent(currentUser, requestDTO);
 
         return ResponseEntity.ok(eventObject);
     }
 
     @PutMapping("/update/{id}")
-    public ResponseEntity<ResponseDTO> updateEvent(@PathVariable Long id, @RequestBody RequestDTO requestDTO) {
-        ResponseDTO eventObject = eventService.updateEvent(requestDTO, id);
+    public ResponseEntity<ResponseDTO> updateEvent(Authentication authentication, @PathVariable Long id, @RequestBody RequestDTO requestDTO) {
+        User currentUser = (User) authentication.getPrincipal();
+        ResponseDTO eventObject = eventService.updateEvent(currentUser, requestDTO, id);
 
         return ResponseEntity.ok(eventObject);
     }
