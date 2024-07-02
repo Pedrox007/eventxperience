@@ -3,7 +3,7 @@ package com.project.eventxperience.framework.model.dto;
 import lombok.Data;
 
 @Data
-public class RatingDTO {
+public class ReviewDTO {
     private Long id;
     private String rating;
     private Long userId;

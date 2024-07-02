@@ -2,7 +2,7 @@ package com.project.eventxperience.framework.controller;
 
 import com.project.eventxperience.framework.model.Review;
 import com.project.eventxperience.framework.model.User;
-import com.project.eventxperience.framework.model.dto.RatingDTO;
+import com.project.eventxperience.framework.model.dto.ReviewDTO;
 import com.project.eventxperience.framework.service.ReviewService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -14,44 +14,44 @@ import java.util.Optional;
 
 @RestController
 public abstract class ReviewController {
-    private ReviewService ratingService;
+    private ReviewService reviewService;
 
     @Autowired
-    public ReviewController(ReviewService ratingService) {
-        this.ratingService = ratingService;
+    public ReviewController(ReviewService reviewService) {
+        this.reviewService = reviewService;
     }
 
     @PostMapping
-    public ResponseEntity<Review> addRating(@RequestBody RatingDTO ratingDTO) {
+    public ResponseEntity<Review> addReview(@RequestBody ReviewDTO reviewDTO) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         User currentUser = (User) authentication.getPrincipal();
 
-        ratingDTO.setUserId(currentUser.getId());
+        reviewDTO.setUserId(currentUser.getId());
 
-        Review createdRating = ratingService.saveRating(ratingDTO);
+        Review createdReview = reviewService.saveReview(reviewDTO);
 
-        return ResponseEntity.ok(createdRating);
+        return ResponseEntity.ok(createdReview);
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Review> deleteRating(@PathVariable Long id) {
-        Review ratingDeleted = ratingService.deleteById(id);
+    public ResponseEntity<Review> deleteReview(@PathVariable Long id) {
+        Review reviewDeleted = reviewService.deleteById(id);
 
-        return ResponseEntity.ok(ratingDeleted);
+        return ResponseEntity.ok(reviewDeleted);
     }
 
     @GetMapping("/user/{userId}")
-    public ResponseEntity<Iterable<Review>> getAllRatingsByUserId(@PathVariable Long userId) {
-        Iterable<Review> ratings = ratingService.findAllByUserId(userId);
+    public ResponseEntity<Iterable<Review>> getAllReviewsByUserId(@PathVariable Long userId) {
+        Iterable<Review> reviews = reviewService.findAllByUserId(userId);
 
-        return ResponseEntity.ok(ratings);
+        return ResponseEntity.ok(reviews);
     }
 
     @GetMapping("/attraction/{attractionId}")
-    public ResponseEntity<Iterable<Review>> getAllRatingsByAttractionId(@PathVariable Long attractionId) {
-        Iterable<Review> ratings = ratingService.findAllByAttractionId(attractionId);
+    public ResponseEntity<Iterable<Review>> getAllReviewsByAttractionId(@PathVariable Long attractionId) {
+        Iterable<Review> reviews = reviewService.findAllByAttractionId(attractionId);
 
-        return ResponseEntity.ok(ratings);
+        return ResponseEntity.ok(reviews);
     }
 
 //    @GetMapping("/event/{eventId}")
@@ -62,9 +62,9 @@ public abstract class ReviewController {
 //    }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Optional<Review>> getRatingById(@PathVariable Long id) {
-        Optional<Review> rating = ratingService.findById(id);
+    public ResponseEntity<Optional<Review>> getReviewById(@PathVariable Long id) {
+        Optional<Review> review = reviewService.findById(id);
 
-        return ResponseEntity.ok(rating);
+        return ResponseEntity.ok(review);
     }
 }
