@@ -4,7 +4,7 @@ import com.project.eventxperience.framework.controller.RecommendationController;
 import com.project.eventxperience.framework.model.Event;
 import com.project.eventxperience.framework.model.User;
 import com.project.eventxperience.framework.service.RecommendationService;
-import com.project.eventxperience.sportevent.recommendation.SportEventRecommendationStrategy;
+import com.project.eventxperience.sportevent.service.SportEventRecommendationStrategy;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -21,12 +21,5 @@ public class SportEventRecommendationController extends RecommendationController
     public SportEventRecommendationController(RecommendationService recommendationService, SportEventRecommendationStrategy sportEventRecommendationStrategy) {
         super(recommendationService);
         this.recommendationService.changeRecommendationStrategy(sportEventRecommendationStrategy);
-    }
-
-    @Override
-    @GetMapping
-    public List<Event> getEventRecommendations(Authentication authentication) {
-        User currentUser = (User) authentication.getPrincipal();
-        return recommendationService.generateRecommendations(currentUser);
     }
 }

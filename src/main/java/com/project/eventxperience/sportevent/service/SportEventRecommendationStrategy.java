@@ -1,4 +1,4 @@
-package com.project.eventxperience.sportevent.recommendation;
+package com.project.eventxperience.sportevent.service;
 
 import com.project.eventxperience.framework.model.User;
 import com.project.eventxperience.framework.model.Event;
