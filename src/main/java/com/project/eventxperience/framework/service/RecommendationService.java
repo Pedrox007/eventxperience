@@ -34,6 +34,6 @@ public class RecommendationService {
 
     public User findUserById(Long userId) {
         return userRepository.findById(userId)
-                .orElseThrow(() -> new IllegalArgumentException("User not found with id: " + userId));
+                .orElseThrow(() -> new IllegalArgumentException("Usuário não encontrado com id: " + userId));
     }
 }
