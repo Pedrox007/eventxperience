@@ -10,6 +10,7 @@ import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 @EqualsAndHashCode(callSuper = true)
@@ -28,4 +29,5 @@ public class SportEvent extends Event {
     public SportEvent(Sport sport) {
         this.sport = sport;
     }
+
 }

@@ -1,61 +1,62 @@
 package com.project.eventxperience.framework.service;
 
+import com.project.eventxperience.framework.model.Event;
 import com.project.eventxperience.framework.model.Ticket;
 import com.project.eventxperience.framework.model.User;
-import com.project.eventxperience.sportevent.model.SportEvent;
-import com.project.eventxperience.sportevent.repository.SportEventRepository;
 import com.project.eventxperience.framework.repository.TicketRepository;
-import com.project.eventxperience.framework.utils.EventUtils;
+import com.project.eventxperience.framework.repository.EventRepository;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class TicketService {
-
+    private final EventRepository<Event> eventRepository;
     private final TicketRepository ticketRepository;
-    private final SportEventRepository sportEventRepository;
 
     @Autowired
-    public TicketService(TicketRepository ticketRepository, SportEventRepository sportEventRepository) {
+    public TicketService(EventRepository<Event> eventRepository, TicketRepository ticketRepository) {
+        this.eventRepository = eventRepository;
         this.ticketRepository = ticketRepository;
-        this.sportEventRepository = sportEventRepository;
     }
 
-    public Ticket purchaseTicket(User user, SportEvent sportEvent) {
+    @Transactional
+    public Ticket purchaseTicket(User user, Long eventId) {
         try {
+            Event existingEvent = eventRepository.findById(eventId)
+                    .orElseThrow(() -> new EntityNotFoundException("Evento não encontrado com id: " + eventId));
+
             // Verifica se o usuário já possui um ticket para este evento
             boolean hasTicket = user.getTickets().stream()
-                    .anyMatch(ticket -> ticket.getEvent().getId().equals(sportEvent.getId()));
+                    .anyMatch(ticket -> ticket.getEvent().getId().equals(existingEvent.getId()));
 
             if (hasTicket) {
                 throw new IllegalArgumentException("O usuário já possui um ticket para este evento.");
             }
 
             Ticket ticket = new Ticket();
-            ticket.setPrice(sportEvent.getTicketPrice());
+            ticket.setPrice(existingEvent.getTicketPrice());
             ticket.setUser(user);
-            ticket.setEvent(sportEvent);
+            ticket.setEvent(existingEvent);
             ticket.setConfirmed(false);
 
             return ticketRepository.save(ticket);
-        } catch (DataAccessException e) {
-            throw new IllegalStateException("Erro ao obter o ticket", e);
+        } catch (EntityNotFoundException e) {
+            throw e; // Propaga a exceção EntityNotFoundException para ser tratada no controlador
+        } catch (IllegalArgumentException e) {
+            throw e; // Propaga a exceção IllegalArgumentException para ser tratada no controlador
         }
     }
 
-    public void confirmAttendance(SportEvent sportEvent, Long userId, User organizer) {
+    @Transactional
+    public void confirmAttendance(Long eventId, Long userId) {
         try {
-            if (sportEvent == null || sportEvent.getCreator() == null) {
-                throw new IllegalArgumentException("O evento esportivo ou o criador do evento não foi encontrado.");
-            }
+            Event existingEvent = eventRepository.findById(eventId)
+                    .orElseThrow(() -> new EntityNotFoundException("Evento não encontrado com id: " + eventId));
 
-            if (!EventUtils.isOrganizerOfEvent(sportEvent, organizer)) {
-                throw new IllegalArgumentException("Você não tem permissão para confirmar a presença neste evento.");
-            }
-
-            Ticket ticket = ticketRepository.findByEventIdAndUserId(sportEvent.getId(), userId);
+            Ticket ticket = ticketRepository.findByEventIdAndUserId(eventId, userId);
 
             if (ticket == null) {
                 throw new EntityNotFoundException("Ticket não encontrado.");
@@ -68,11 +69,13 @@ public class TicketService {
         }
     }
 
-    public boolean hasConfirmedAttendance(SportEvent sportEvent, Long userId) {
-        Ticket ticket = ticketRepository.findByEventIdAndUserId(sportEvent.getId(), userId);
+    @Transactional(readOnly = true)
+    public boolean hasConfirmedAttendance(Long eventId, Long userId) {
+        Ticket ticket = ticketRepository.findByEventIdAndUserId(eventId, userId);
         return ticket != null && ticket.isConfirmed();
     }
 
+    @Transactional(readOnly = true)
     public int countConfirmedUsersForEvent(Long eventId) {
         return ticketRepository.countByEventIdAndConfirmedTrue(eventId);
     }

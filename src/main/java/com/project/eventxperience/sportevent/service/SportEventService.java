@@ -1,5 +1,7 @@
 package com.project.eventxperience.sportevent.service;
 
+import com.project.eventxperience.framework.model.Event;
+import com.project.eventxperience.framework.repository.EventRepository;
 import com.project.eventxperience.framework.service.base.EventServiceInterface;
 import com.project.eventxperience.sportevent.model.Sport;
 import com.project.eventxperience.sportevent.model.SportEvent;
@@ -11,8 +13,10 @@ import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class SportEventService implements EventServiceInterface<SportEventRequestDTO, SportEventResponseDTO> {
@@ -20,6 +24,9 @@ public class SportEventService implements EventServiceInterface<SportEventReques
     private SportEventRepository sportEventRepository;
     @Autowired
     private SportRepository sportRepository;
+
+    @Autowired
+    private EventRepository eventRepository;
 
     @Override
     public SportEventResponseDTO saveEvent(SportEventRequestDTO sportEventRequestDTO) {
@@ -36,20 +43,20 @@ public class SportEventService implements EventServiceInterface<SportEventReques
 
     @Override
     public SportEventResponseDTO retrieveEventById(Long id) {
-        Optional<SportEvent> sportEvent = sportEventRepository.findById(id);
+        Optional<Event> sportEvent = sportEventRepository.findById(id);
         if (sportEvent.isEmpty()) {
             return null;
         }
 
         SportEventResponseDTO sportEventResponseDTO = new SportEventResponseDTO();
-        sportEventResponseDTO.parseToDTO(sportEvent.get());
+        sportEventResponseDTO.parseToDTO((SportEvent) sportEvent.get());
 
         return sportEventResponseDTO;
     }
 
     @Override
     public SportEventResponseDTO deleteEvent(Long id) {
-        Optional<SportEvent> sportEvent = sportEventRepository.findById(id);
+        Optional<Event> sportEvent = sportEventRepository.findById(id);
         if (sportEvent.isEmpty()) {
             throw new EntityNotFoundException("Sport Event not found!");
         }
@@ -57,7 +64,7 @@ public class SportEventService implements EventServiceInterface<SportEventReques
         sportEventRepository.deleteById(id);
 
         SportEventResponseDTO sportEventResponseDTO = new SportEventResponseDTO();
-        sportEventResponseDTO.parseToDTO(sportEvent.get());
+        sportEventResponseDTO.parseToDTO((SportEvent) sportEvent.get());
 
         return sportEventResponseDTO;
     }
@@ -86,12 +93,21 @@ public class SportEventService implements EventServiceInterface<SportEventReques
 
     @Override
     public List<SportEventResponseDTO> listEvent() {
-        List<SportEvent> sportEvents = (List<SportEvent>) sportEventRepository.findAll();
+        Iterable<Event> events = eventRepository.findAll();
+        List<SportEvent> sportEvents = new ArrayList<>();
 
-        return sportEvents.stream().map((sportEvent) -> {
-            SportEventResponseDTO sportEventResponseDTO = new SportEventResponseDTO();
-            sportEventResponseDTO.parseToDTO(sportEvent);
-            return sportEventResponseDTO;
-        }).toList();
+        for (Event event : events) {
+            if (event instanceof SportEvent) {
+                sportEvents.add((SportEvent) event);
+            }
+        }
+
+        return sportEvents.stream()
+                .map(sportEvent -> {
+                    SportEventResponseDTO sportEventResponseDTO = new SportEventResponseDTO();
+                    sportEventResponseDTO.parseToDTO(sportEvent);
+                    return sportEventResponseDTO;
+                })
+                .collect(Collectors.toList());
     }
 }
