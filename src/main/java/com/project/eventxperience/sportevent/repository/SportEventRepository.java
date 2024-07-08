@@ -10,5 +10,4 @@ import java.util.List;
 @Repository
 public interface SportEventRepository extends EventRepository<SportEvent> {
     List<SportEvent> findBySport(Sport sport);
-
 }

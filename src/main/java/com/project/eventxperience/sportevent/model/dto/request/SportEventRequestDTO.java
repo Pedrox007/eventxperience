@@ -1,7 +1,6 @@
 package com.project.eventxperience.sportevent.model.dto.request;
 
 import com.project.eventxperience.framework.model.dto.base.BaseDTO;
-import com.project.eventxperience.sportevent.model.Sport;
 import com.project.eventxperience.sportevent.model.SportEvent;
 import lombok.Data;
 

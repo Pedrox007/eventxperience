@@ -2,6 +2,11 @@ package com.project.eventxperience.framework.config;
 
 import com.project.eventxperience.framework.model.*;
 import com.project.eventxperience.framework.repository.*;
+import com.project.eventxperience.musicevent.model.Band;
+import com.project.eventxperience.musicevent.model.MusicEvent;
+import com.project.eventxperience.musicevent.model.enums.MusicStyleValue;
+import com.project.eventxperience.musicevent.repository.BandRepository;
+import com.project.eventxperience.musicevent.repository.MusicEventRepository;
 import com.project.eventxperience.sportevent.model.Sport;
 import com.project.eventxperience.sportevent.model.SportEvent;
 import com.project.eventxperience.sportevent.repository.SportEventRepository;
@@ -22,14 +27,18 @@ public class DataInitializer implements CommandLineRunner {
     private final UserRepository userRepository;
     private final SportRepository sportRepository;
     private final SportEventRepository sportEventRepository;
+    private final MusicEventRepository musicEventRepository;
+    private final BandRepository bandRepository;
     private final PasswordEncoder passwordEncoder;
 
     @Autowired
-    public DataInitializer(RoleRepository roleRepository, UserRepository userRepository, SportRepository sportRepository, SportEventRepository sportEventRepository, PasswordEncoder passwordEncoder) {
+    public DataInitializer(RoleRepository roleRepository, UserRepository userRepository, SportRepository sportRepository, SportEventRepository sportEventRepository, MusicEventRepository musicEventRepository, BandRepository bandRepository, PasswordEncoder passwordEncoder) {
         this.roleRepository = roleRepository;
         this.userRepository = userRepository;
         this.sportRepository = sportRepository;
         this.sportEventRepository = sportEventRepository;
+        this.musicEventRepository = musicEventRepository;
+        this.bandRepository = bandRepository;
         this.passwordEncoder = passwordEncoder;
     }
 
@@ -135,6 +144,76 @@ public class DataInitializer implements CommandLineRunner {
             fourthEvent.setSport(sport2.orElse(null));
 
             sportEventRepository.saveAll(Arrays.asList(firstEvent, secondEvent, thirdEvent, fourthEvent));
+        }
+
+        // Criar bandas
+        if (bandRepository.count() == 0) {
+            Band band1 = new Band();
+            band1.setName("Banda 1");
+            band1.setMusicStyle(MusicStyleValue.POP);
+
+            Band band2 = new Band();
+            band2.setName("Banda 2");
+            band2.setMusicStyle(MusicStyleValue.ROCK);
+
+            Band band3 = new Band();
+            band3.setName("Banda 3");
+            band3.setMusicStyle(MusicStyleValue.FORRO);
+
+            Band band4 = new Band();
+            band4.setName("Banda 4");
+            band4.setMusicStyle(MusicStyleValue.SAMBA);
+
+            Band band5 = new Band();
+            band5.setName("Banda 5");
+            band5.setMusicStyle(MusicStyleValue.PAGODE);
+
+            bandRepository.saveAll(Arrays.asList(band1, band2, band3, band4, band5));
+        }
+
+        // Criar eventos de música
+        if (musicEventRepository.count() == 0) {
+            Optional<User> user1 = userRepository.findByUsername("carol");
+            Optional<User> user2 = userRepository.findByUsername("pedro");
+            Optional<Band> band1 = bandRepository.findByName("Banda 1");
+            Optional<Band> band2 = bandRepository.findByName("Banda 2");
+            Optional<Band> band3 = bandRepository.findByName("Banda 3");
+            Optional<Band> band4 = bandRepository.findByName("Banda 4");
+            Optional<Band> band5 = bandRepository.findByName("Banda 5");
+
+            MusicEvent firstEvent = new MusicEvent();
+            firstEvent.setName("Show de pop");
+            firstEvent.setDescription("Show de pop com bandas locais");
+            firstEvent.setTicketQuantity(10);
+            firstEvent.setTicketPrice(10.0F);
+            firstEvent.setCreator(user1.orElse(null));
+            firstEvent.setBands(Arrays.asList(band1.orElse(null), band2.orElse(null)));
+
+            MusicEvent secondEvent = new MusicEvent();
+            secondEvent.setName("Show de rock");
+            secondEvent.setDescription("Show de rock com bandas locais");
+            secondEvent.setTicketQuantity(20);
+            secondEvent.setTicketPrice(20.0F);
+            secondEvent.setCreator(user1.orElse(null));
+            secondEvent.setBands(Arrays.asList(band2.orElse(null), band3.orElse(null)));
+
+            MusicEvent thirdEvent = new MusicEvent();
+            thirdEvent.setName("Show de forró");
+            thirdEvent.setDescription("Show de forró com bandas locais");
+            thirdEvent.setTicketQuantity(10);
+            thirdEvent.setTicketPrice(10.0F);
+            thirdEvent.setCreator(user2.orElse(null));
+            thirdEvent.setBands(Arrays.asList(band3.orElse(null), band4.orElse(null)));
+
+            MusicEvent fourthEvent = new MusicEvent();
+            fourthEvent.setName("Show de samba");
+            fourthEvent.setDescription("Show de samba com bandas locais");
+            fourthEvent.setTicketQuantity(20);
+            fourthEvent.setTicketPrice(20.0F);
+            fourthEvent.setCreator(user2.orElse(null));
+            fourthEvent.setBands(Arrays.asList(band4.orElse(null), band5.orElse(null)));
+
+            musicEventRepository.saveAll(Arrays.asList(firstEvent, secondEvent, thirdEvent, fourthEvent));
         }
     }
 }

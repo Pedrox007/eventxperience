@@ -26,9 +26,6 @@ public class SportEventService implements EventServiceInterface<SportEventReques
     @Autowired
     private SportRepository sportRepository;
 
-    @Autowired
-    private EventRepository eventRepository;
-
     @Override
     public SportEventResponseDTO saveEvent(User authenticatedUser, SportEventRequestDTO sportEventRequestDTO) {
         Optional<Sport> sport = Optional.ofNullable(sportRepository.findById(sportEventRequestDTO.getSportId()).orElseThrow(() -> new EntityNotFoundException("Sport does not exist!")));
@@ -45,28 +42,22 @@ public class SportEventService implements EventServiceInterface<SportEventReques
 
     @Override
     public SportEventResponseDTO retrieveEventById(Long id) {
-        Optional<Event> sportEvent = sportEventRepository.findById(id);
-        if (sportEvent.isEmpty()) {
-            return null;
-        }
+        SportEvent sportEvent = sportEventRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Sport event does not exist!"));
 
         SportEventResponseDTO sportEventResponseDTO = new SportEventResponseDTO();
-        sportEventResponseDTO.parseToDTO((SportEvent) sportEvent.get());
+        sportEventResponseDTO.parseToDTO(sportEvent);
 
         return sportEventResponseDTO;
     }
 
     @Override
     public SportEventResponseDTO deleteEvent(Long id) {
-        Optional<Event> sportEvent = sportEventRepository.findById(id);
-        if (sportEvent.isEmpty()) {
-            throw new EntityNotFoundException("Sport Event not found!");
-        }
+        SportEvent sportEvent = sportEventRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Sport event does not exist!"));
 
         sportEventRepository.deleteById(id);
 
         SportEventResponseDTO sportEventResponseDTO = new SportEventResponseDTO();
-        sportEventResponseDTO.parseToDTO((SportEvent) sportEvent.get());
+        sportEventResponseDTO.parseToDTO(sportEvent);
 
         return sportEventResponseDTO;
     }
@@ -96,14 +87,9 @@ public class SportEventService implements EventServiceInterface<SportEventReques
 
     @Override
     public List<SportEventResponseDTO> listEvent() {
-        Iterable<Event> events = eventRepository.findAll();
+        Iterable<SportEvent> events = sportEventRepository.findAll();
         List<SportEvent> sportEvents = new ArrayList<>();
-
-        for (Event event : events) {
-            if (event instanceof SportEvent) {
-                sportEvents.add((SportEvent) event);
-            }
-        }
+        events.forEach(sportEvents::add);
 
         return sportEvents.stream()
                 .map(sportEvent -> {

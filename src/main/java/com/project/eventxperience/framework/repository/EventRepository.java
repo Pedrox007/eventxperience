@@ -7,6 +7,6 @@ import org.springframework.stereotype.Repository;
 import java.util.Optional;
 
 @Repository
-public interface EventRepository<E extends Event> extends CrudRepository<Event, Long> {
+public interface EventRepository<E extends Event> extends CrudRepository<E, Long> {
 }
 
