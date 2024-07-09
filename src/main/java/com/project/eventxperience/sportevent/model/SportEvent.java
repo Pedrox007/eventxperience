@@ -1,17 +1,10 @@
 package com.project.eventxperience.sportevent.model;
-import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonIdentityInfo;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
-import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+
 import com.project.eventxperience.framework.model.Event;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 
 @EqualsAndHashCode(callSuper = true)
 @Entity

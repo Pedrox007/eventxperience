@@ -1,9 +1,9 @@
 package com.project.eventxperience.sportevent.controller;
 
 import com.project.eventxperience.framework.controller.RecommendationController;
-import com.project.eventxperience.framework.model.Event;
 import com.project.eventxperience.framework.model.User;
 import com.project.eventxperience.framework.service.RecommendationService;
+import com.project.eventxperience.sportevent.model.dto.response.SportEventResponseDTO;
 import com.project.eventxperience.sportevent.service.SportEventRecommendationStrategy;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
@@ -14,12 +14,22 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 
 @RestController
-@RequestMapping("/sport_event_recommendations")
+@RequestMapping("/recommendations/sport_events")
 public class SportEventRecommendationController extends RecommendationController {
+
+    private final SportEventRecommendationStrategy sportEventRecommendationStrategy;
 
     @Autowired
     public SportEventRecommendationController(RecommendationService recommendationService, SportEventRecommendationStrategy sportEventRecommendationStrategy) {
         super(recommendationService);
-        this.recommendationService.changeRecommendationStrategy(sportEventRecommendationStrategy);
+        this.sportEventRecommendationStrategy = sportEventRecommendationStrategy;
+    }
+
+    @Override
+    @GetMapping
+    public List<SportEventResponseDTO> getEventRecommendations(Authentication authentication) {
+        recommendationService.changeRecommendationStrategy(sportEventRecommendationStrategy);
+        User currentUser = (User) authentication.getPrincipal();
+        return recommendationService.generateRecommendations(currentUser);
     }
 }

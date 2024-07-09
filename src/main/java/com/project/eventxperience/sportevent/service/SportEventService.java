@@ -52,7 +52,7 @@ public class SportEventService implements EventServiceInterface<SportEventReques
 
     @Override
     public SportEventResponseDTO deleteEvent(Long id) {
-        SportEvent sportEvent = sportEventRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Sport event does not exist!"));
+        SportEvent sportEvent = sportEventRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Evento esportivo não encontrado!"));
 
         sportEventRepository.deleteById(id);
 
@@ -65,11 +65,11 @@ public class SportEventService implements EventServiceInterface<SportEventReques
     @Override
     public SportEventResponseDTO updateEvent(User authenticatedUser, SportEventRequestDTO sportEventRequestDTO, Long id) {
         if (sportEventRepository.findById(id).isEmpty()) {
-            throw new EntityNotFoundException("Sport Event not found!");
+            throw new EntityNotFoundException("Evento esportivo não encontrado!");
         }
         Optional<Sport> sport = sportRepository.findById(sportEventRequestDTO.getSportId());
         if (sport.isEmpty()) {
-            throw new EntityNotFoundException("Sport not found!");
+            throw new EntityNotFoundException("Esporte não encontrado!");
         }
 
         SportEvent sportEvent = sportEventRequestDTO.parseToEntity();

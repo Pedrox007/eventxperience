@@ -8,6 +8,5 @@ import java.util.Optional;
 
 @Repository
 public interface BandRepository extends CrudRepository<Band, Long> {
-
     Optional<Band> findByName(String name);
 }

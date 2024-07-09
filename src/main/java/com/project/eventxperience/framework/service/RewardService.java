@@ -6,8 +6,6 @@ import com.project.eventxperience.framework.model.Reward;
 import com.project.eventxperience.framework.model.dto.RewardDTO;
 import com.project.eventxperience.framework.model.User;
 import com.project.eventxperience.framework.repository.RewardRepository;
-import com.project.eventxperience.framework.utils.EventUtils;
-import com.project.eventxperience.sportevent.model.SportEvent;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
@@ -106,7 +104,6 @@ public class RewardService {
                 throw new IllegalStateException("A recompensa já foi retirada.");
             }
         } catch (Exception e) {
-            System.out.println("Erro ao confirmar a recompensa: " + e.getMessage());
             throw new IllegalStateException("Erro ao confirmar a recompensa.", e);
         }
     }

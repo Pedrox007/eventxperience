@@ -1,22 +1,22 @@
-package com.project.eventxperience.musicevent.model.dto;
+package com.project.eventxperience.musicevent.model.dto.response;
 
 import com.project.eventxperience.framework.model.dto.base.BaseDTO;
 import com.project.eventxperience.musicevent.model.Band;
-import com.project.eventxperience.musicevent.model.enums.MusicStyleValue;
+import com.project.eventxperience.musicevent.model.enums.MusicGenreValue;
 import lombok.Data;
 
 @Data
-public class BandDTO implements BaseDTO<Band> {
+public class BandResponseDTO implements BaseDTO<Band> {
     private Long id;
     private String name;
-    private MusicStyleValue musicStyle;
+    private MusicGenreValue musicGenre;
 
     @Override
     public Band parseToEntity() {
         Band band = new Band();
         band.setId(id);
         band.setName(name);
-        band.setMusicStyle(musicStyle);
+        band.setMusicGenre(musicGenre);
 
         return band;
     }
@@ -25,6 +25,6 @@ public class BandDTO implements BaseDTO<Band> {
     public void parseToDTO(Band band) {
         setId(band.getId());
         setName(band.getName());
-        setMusicStyle(band.getMusicStyle());
+        setMusicGenre(band.getMusicGenre());
     }
 }

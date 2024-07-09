@@ -4,14 +4,13 @@ import com.project.eventxperience.framework.model.*;
 import com.project.eventxperience.framework.repository.*;
 import com.project.eventxperience.musicevent.model.Band;
 import com.project.eventxperience.musicevent.model.MusicEvent;
-import com.project.eventxperience.musicevent.model.enums.MusicStyleValue;
+import com.project.eventxperience.musicevent.model.enums.MusicGenreValue;
 import com.project.eventxperience.musicevent.repository.BandRepository;
 import com.project.eventxperience.musicevent.repository.MusicEventRepository;
 import com.project.eventxperience.seminarevent.model.SeminarEvent;
 import com.project.eventxperience.seminarevent.model.Speaker;
 import com.project.eventxperience.seminarevent.repository.SeminarEventRepository;
 import com.project.eventxperience.seminarevent.repository.SpeakerRepository;
-import com.project.eventxperience.seminarevent.service.SeminarEventService;
 import com.project.eventxperience.sportevent.model.Sport;
 import com.project.eventxperience.sportevent.model.SportEvent;
 import com.project.eventxperience.sportevent.repository.SportEventRepository;
@@ -159,23 +158,23 @@ public class DataInitializer implements CommandLineRunner {
         if (bandRepository.count() == 0) {
             Band band1 = new Band();
             band1.setName("Banda 1");
-            band1.setMusicStyle(MusicStyleValue.POP);
+            band1.setMusicGenre(MusicGenreValue.POP);
 
             Band band2 = new Band();
             band2.setName("Banda 2");
-            band2.setMusicStyle(MusicStyleValue.ROCK);
+            band2.setMusicGenre(MusicGenreValue.ROCK);
 
             Band band3 = new Band();
             band3.setName("Banda 3");
-            band3.setMusicStyle(MusicStyleValue.FORRO);
+            band3.setMusicGenre(MusicGenreValue.FORRO);
 
             Band band4 = new Band();
             band4.setName("Banda 4");
-            band4.setMusicStyle(MusicStyleValue.SAMBA);
+            band4.setMusicGenre(MusicGenreValue.SAMBA);
 
             Band band5 = new Band();
             band5.setName("Banda 5");
-            band5.setMusicStyle(MusicStyleValue.PAGODE);
+            band5.setMusicGenre(MusicGenreValue.PAGODE);
 
             bandRepository.saveAll(Arrays.asList(band1, band2, band3, band4, band5));
         }

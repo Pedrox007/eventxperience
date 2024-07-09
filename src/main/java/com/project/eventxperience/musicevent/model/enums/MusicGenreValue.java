@@ -1,6 +1,6 @@
 package com.project.eventxperience.musicevent.model.enums;
 
-public enum MusicStyleValue {
+public enum MusicGenreValue {
     POP,
     ROCK,
     FORRO,

@@ -6,6 +6,7 @@ import com.project.eventxperience.framework.repository.TicketRepository;
 import com.project.eventxperience.framework.recommendation.RecommendationStrategy;
 import com.project.eventxperience.sportevent.model.Sport;
 import com.project.eventxperience.sportevent.model.SportEvent;
+import com.project.eventxperience.sportevent.model.dto.response.SportEventResponseDTO;
 import com.project.eventxperience.sportevent.repository.SportEventRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -14,7 +15,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 @Component
-public class SportEventRecommendationStrategy implements RecommendationStrategy {
+public class SportEventRecommendationStrategy implements RecommendationStrategy<SportEventResponseDTO> {
 
     private final SportEventRepository sportEventRepository;
     private final TicketRepository ticketRepository;
@@ -26,7 +27,7 @@ public class SportEventRecommendationStrategy implements RecommendationStrategy 
     }
 
     @Override
-    public List<Event> recommend(User user) {
+    public List<SportEventResponseDTO> recommend(User user) {
         // Obtem os eventos confirmados do usuário
         List<Event> attendedEvents = ticketRepository.findEventsByUser(user);
 
@@ -37,13 +38,25 @@ public class SportEventRecommendationStrategy implements RecommendationStrategy 
                 .collect(Collectors.toSet());
 
         // Encontra eventos semelhantes baseados nesses esportes
-        List<Event> recommendedEvents = sports.stream()
+        List<SportEvent> recommendedEvents = sports.stream()
                 .flatMap(sport -> sportEventRepository.findBySport(sport).stream())
                 .filter(event -> !attendedEvents.contains(event)) // Exclui os eventos já assistidos
                 .distinct()
                 .collect(Collectors.toList());
 
-        // Retorna os eventos recomendados como uma lista de Event
-        return recommendedEvents;
+        // Converter eventos recomendados para SportEventResponseDTOs
+        List<SportEventResponseDTO> recommendedEventDTOs = recommendedEvents.stream()
+                .map(this::convertToDTO)
+                .collect(Collectors.toList());
+
+        // Retorna os eventos recomendados como uma lista de SportEventResponseDTO
+        return recommendedEventDTOs;
+    }
+
+    // Método para converter SportEvent para SportEventResponseDTO
+    private SportEventResponseDTO convertToDTO(SportEvent sportEvent) {
+        SportEventResponseDTO dto = new SportEventResponseDTO();
+        dto.parseToDTO(sportEvent);
+        return dto;
     }
 }

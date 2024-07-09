@@ -11,4 +11,3 @@ import java.util.Optional;
 public interface SportRepository extends CrudRepository<Sport, Long> {
     Optional<Sport> findByName(String name);
 }
-

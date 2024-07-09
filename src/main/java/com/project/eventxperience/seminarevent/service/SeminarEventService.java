@@ -98,21 +98,13 @@ public class SeminarEventService implements EventServiceInterface<SeminarEventRe
 
     private List<Speaker> validateSpeakers(SeminarEventRequestDTO seminarEventRequestDTO) {
         List<Speaker> speakers = new ArrayList<>();
-
-        seminarEventRequestDTO.getSpeakers().forEach(speakerDTO -> {
-            Speaker speaker = new Speaker();
-
-            if (speakerDTO.getId() != null) {
-                speaker = speakerRepository.findById(speakerDTO.getId()).orElseThrow(() -> new EntityNotFoundException("Speaker with id " + speakerDTO.getId() + " does not exist!"));
-            } else {
-                speaker.setName(speakerDTO.getName());
-                speaker.setExpertise(speakerDTO.getExpertise());
-                speaker = speakerRepository.save(speaker);
-            }
-
+    
+        seminarEventRequestDTO.getSpeakerIds().forEach(speakerId -> {
+            Speaker speaker = speakerRepository.findById(speakerId)
+                    .orElseThrow(() -> new EntityNotFoundException("Speaker with id " + speakerId + " does not exist!"));
             speakers.add(speaker);
         });
-
+    
         return speakers;
-    }
+    }    
 }

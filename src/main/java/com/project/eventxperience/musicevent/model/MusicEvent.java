@@ -9,14 +9,15 @@ import java.util.List;
 
 @EqualsAndHashCode(callSuper = true)
 @Entity
-@Table(name = "db_music_event")
 @Data
-@PrimaryKeyJoinColumn(referencedColumnName="id")
+@Table(name = "db_music_event")
+@PrimaryKeyJoinColumn(referencedColumnName = "id")
 public class MusicEvent extends Event {
+
     @ManyToMany
     @JoinTable(
-            name = "musicevent_band",
-            joinColumns = @JoinColumn(name = "event_id"),
+            name = "music_event_band",
+            joinColumns = @JoinColumn(name = "music_event_id"),
             inverseJoinColumns = @JoinColumn(name = "band_id")
     )
     private List<Band> bands;

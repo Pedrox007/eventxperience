@@ -2,12 +2,11 @@ package com.project.eventxperience.seminarevent.model.dto.response;
 
 import com.project.eventxperience.framework.model.dto.base.BaseDTO;
 import com.project.eventxperience.seminarevent.model.SeminarEvent;
-import com.project.eventxperience.seminarevent.model.dto.SpeakerDTO;
 import lombok.Data;
 
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @Data
 public class SeminarEventResponseDTO implements BaseDTO<SeminarEvent> {
@@ -17,8 +16,9 @@ public class SeminarEventResponseDTO implements BaseDTO<SeminarEvent> {
     private Date eventDate;
     private Integer ticketQuantity;
     private Float ticketPrice;
+    private String theme;
+    private Set<SpeakerResponseDTO> speakers;
     private Long creatorId;
-    private List<SpeakerDTO> speakers = new ArrayList<>();
 
     @Override
     public SeminarEvent parseToEntity() {
@@ -28,7 +28,7 @@ public class SeminarEventResponseDTO implements BaseDTO<SeminarEvent> {
         seminarEvent.setEventDate(eventDate);
         seminarEvent.setTicketQuantity(ticketQuantity);
         seminarEvent.setTicketPrice(ticketPrice);
-
+        seminarEvent.setTheme(theme);
         return seminarEvent;
     }
 
@@ -40,12 +40,13 @@ public class SeminarEventResponseDTO implements BaseDTO<SeminarEvent> {
         setEventDate(seminarEvent.getEventDate());
         setTicketQuantity(seminarEvent.getTicketQuantity());
         setTicketPrice(seminarEvent.getTicketPrice());
+        setTheme(seminarEvent.getTheme());
         setCreatorId(seminarEvent.getCreator().getId());
 
-        seminarEvent.getSpeakers().forEach(speaker -> {
-            SpeakerDTO speakerDTO = new SpeakerDTO();
+        setSpeakers(seminarEvent.getSpeakers().stream().map(speaker -> {
+            SpeakerResponseDTO speakerDTO = new SpeakerResponseDTO();
             speakerDTO.parseToDTO(speaker);
-            speakers.add(speakerDTO);
-        });
+            return speakerDTO;
+        }).collect(Collectors.toSet()));
     }
 }

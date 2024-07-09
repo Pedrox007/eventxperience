@@ -13,27 +13,22 @@ import java.util.List;
 public class RecommendationService {
 
     private final UserRepository userRepository;
-    private RecommendationStrategy recommendationStrategy;
+    private RecommendationStrategy<?> recommendationStrategy;
 
     @Autowired
     public RecommendationService(UserRepository userRepository) {
         this.userRepository = userRepository;
     }
 
-
-    public void changeRecommendationStrategy(RecommendationStrategy strategy) {
+    public void changeRecommendationStrategy(RecommendationStrategy<?> strategy) {
         this.recommendationStrategy = strategy;
     }
 
-    public List<Event> generateRecommendations(User user) {
+    public <T> List<T> generateRecommendations(User user) {
         if (recommendationStrategy == null) {
             throw new IllegalStateException("Nenhuma estratégia de recomendação definida.");
         }
-        return recommendationStrategy.recommend(user);
-    }
-
-    public User findUserById(Long userId) {
-        return userRepository.findById(userId)
-                .orElseThrow(() -> new IllegalArgumentException("Usuário não encontrado com id: " + userId));
+        return (List<T>) recommendationStrategy.recommend(user);
     }
 }
+

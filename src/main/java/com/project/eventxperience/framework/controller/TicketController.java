@@ -1,6 +1,9 @@
 package com.project.eventxperience.framework.controller;
 
+import com.project.eventxperience.framework.model.Event;
 import com.project.eventxperience.framework.model.User;
+import com.project.eventxperience.framework.repository.EventRepository;
+import com.project.eventxperience.framework.utils.EventUtils;
 import com.project.eventxperience.framework.service.TicketService;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,15 +13,19 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Optional;
+
 @RestController
 @RequestMapping("/tickets")
 public class TicketController {
 
     private final TicketService ticketService;
+    private final EventRepository eventRepository;
 
     @Autowired
-    public TicketController(TicketService ticketService) {
+    public TicketController(TicketService ticketService, EventRepository eventRepository) {
         this.ticketService = ticketService;
+        this.eventRepository = eventRepository;
     }
 
     private User getCurrentUser() {
@@ -43,15 +50,24 @@ public class TicketController {
         try {
             User currentUser = (User) authentication.getPrincipal();
 
-            Long userId = currentUser.getId();
+            Optional<Event> eventOptional = eventRepository.findById(eventId);
+            if (eventOptional.isEmpty()) {
+                return ResponseEntity.notFound().build();
+            }
 
-            ticketService.confirmAttendance(eventId, userId);
-            return ResponseEntity.ok("Presença confirmada com sucesso.");
+            Event event = eventOptional.get();
+
+            if (EventUtils.isOrganizerOfEvent(event, currentUser)) {
+                Long userId = currentUser.getId();
+                ticketService.confirmAttendance(eventId, userId);
+                return ResponseEntity.ok("Presença confirmada com sucesso.");
+            } else {
+                return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Usuário não autorizado a confirmar presença.");
+            }
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }
-
 
     @GetMapping("/hasConfirmedAttendance/{eventId}")
     public ResponseEntity<?> hasConfirmedAttendance(@PathVariable Long eventId, Authentication authentication) {

@@ -6,18 +6,22 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 
 import java.util.List;
-
 @EqualsAndHashCode(callSuper = true)
 @Entity
-@Table(name = "db_seminare_event")
 @Data
+@Table(name = "db_seminare_event")
 @PrimaryKeyJoinColumn(referencedColumnName="id")
 public class SeminarEvent extends Event {
-    @ManyToMany
+
+    @Column(name = "theme")
+    private String theme;
+
+    @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
-            name = "musicevent_speaker",
-            joinColumns = @JoinColumn(name = "event_id"),
+            name = "seminar_event_speaker",
+            joinColumns = @JoinColumn(name = "seminar_event_id"),
             inverseJoinColumns = @JoinColumn(name = "speaker_id")
     )
     private List<Speaker> speakers;
 }
+

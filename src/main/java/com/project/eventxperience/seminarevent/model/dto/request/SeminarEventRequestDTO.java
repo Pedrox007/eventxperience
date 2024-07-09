@@ -2,22 +2,22 @@ package com.project.eventxperience.seminarevent.model.dto.request;
 
 import com.project.eventxperience.framework.model.dto.base.BaseDTO;
 import com.project.eventxperience.seminarevent.model.SeminarEvent;
-import com.project.eventxperience.seminarevent.model.dto.SpeakerDTO;
+import com.project.eventxperience.seminarevent.model.Speaker;
 import lombok.Data;
 
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @Data
 public class SeminarEventRequestDTO implements BaseDTO<SeminarEvent> {
-    private Long id;
     private String name;
     private String description;
     private Date eventDate;
     private Integer ticketQuantity;
     private Float ticketPrice;
-    private List<SpeakerDTO> speakers = new ArrayList<>();
+    private String theme;
+    private Set<Long> speakerIds;
 
     @Override
     public SeminarEvent parseToEntity() {
@@ -27,23 +27,18 @@ public class SeminarEventRequestDTO implements BaseDTO<SeminarEvent> {
         seminarEvent.setEventDate(eventDate);
         seminarEvent.setTicketQuantity(ticketQuantity);
         seminarEvent.setTicketPrice(ticketPrice);
-
+        seminarEvent.setTheme(theme);
         return seminarEvent;
     }
 
     @Override
     public void parseToDTO(SeminarEvent seminarEvent) {
-        setId(seminarEvent.getId());
         setName(seminarEvent.getName());
         setDescription(seminarEvent.getDescription());
         setEventDate(seminarEvent.getEventDate());
         setTicketQuantity(seminarEvent.getTicketQuantity());
         setTicketPrice(seminarEvent.getTicketPrice());
-
-        seminarEvent.getSpeakers().forEach(speaker -> {
-            SpeakerDTO speakerDTO = new SpeakerDTO();
-            speakerDTO.parseToDTO(speaker);
-            speakers.add(speakerDTO);
-        });
+        setTheme(seminarEvent.getTheme());
+        setSpeakerIds(seminarEvent.getSpeakers().stream().map(Speaker::getId).collect(Collectors.toSet()));
     }
 }

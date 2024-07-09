@@ -89,7 +89,7 @@ public class MusicEventService implements EventServiceInterface<MusicEventReques
                 band = bandRepository.findById(bandDTO.getId()).orElseThrow(() -> new EntityNotFoundException("Band with id " + bandDTO.getId() + " does not exist!"));
             } else {
                 band.setName(bandDTO.getName());
-                band.setMusicStyle(bandDTO.getMusicStyle());
+                band.setMusicGenre(bandDTO.getMusicGenre());
                 band = bandRepository.save(band);
             }
             bands.add(band);

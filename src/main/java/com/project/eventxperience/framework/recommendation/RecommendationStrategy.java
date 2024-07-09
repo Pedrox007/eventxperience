@@ -5,7 +5,7 @@ import com.project.eventxperience.framework.model.User;
 
 import java.util.List;
 
-public interface RecommendationStrategy {
-
-    List<Event> recommend(User user);
+public interface RecommendationStrategy<T> {
+    List<T> recommend(User user);
 }
+

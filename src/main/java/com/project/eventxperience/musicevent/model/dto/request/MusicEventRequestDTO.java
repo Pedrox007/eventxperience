@@ -2,7 +2,8 @@ package com.project.eventxperience.musicevent.model.dto.request;
 
 import com.project.eventxperience.framework.model.dto.base.BaseDTO;
 import com.project.eventxperience.musicevent.model.MusicEvent;
-import com.project.eventxperience.musicevent.model.dto.BandDTO;
+import com.project.eventxperience.musicevent.model.dto.response.BandResponseDTO;
+
 import lombok.Data;
 
 import java.util.Date;
@@ -16,7 +17,7 @@ public class MusicEventRequestDTO implements BaseDTO<MusicEvent> {
     private Date eventDate;
     private Integer ticketQuantity;
     private Float ticketPrice;
-    private List<BandDTO> bands;
+    private List<BandResponseDTO> bands;
 
     @Override
     public MusicEvent parseToEntity() {
@@ -24,9 +25,7 @@ public class MusicEventRequestDTO implements BaseDTO<MusicEvent> {
         musicEvent.setName(name);
         musicEvent.setDescription(description);
         musicEvent.setEventDate(eventDate);
-        musicEvent.setTicketQuantity(ticketQuantity);
         musicEvent.setTicketPrice(ticketPrice);
-
         return musicEvent;
     }
 
@@ -40,7 +39,7 @@ public class MusicEventRequestDTO implements BaseDTO<MusicEvent> {
         setTicketPrice(musicEvent.getTicketPrice());
 
         musicEvent.getBands().forEach(band -> {
-            BandDTO bandDTO = new BandDTO();
+            BandResponseDTO bandDTO = new BandResponseDTO();
             bandDTO.parseToDTO(band);
             bands.add(bandDTO);
         });

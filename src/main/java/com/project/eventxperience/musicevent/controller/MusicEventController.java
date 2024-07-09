@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/musicEvents")
 public class MusicEventController extends BaseEventController<MusicEventRequestDTO, MusicEventResponseDTO>{
     @Autowired
-    protected MusicEventController(MusicEventService eventService) {
-        super(eventService);
+    protected MusicEventController(MusicEventService musicEventService) {
+        super(musicEventService);
     }
 }
