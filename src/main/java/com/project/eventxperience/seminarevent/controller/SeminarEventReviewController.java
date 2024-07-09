@@ -25,7 +25,6 @@ public class SeminarEventReviewController extends ReviewController {
     @Override
     public ResponseEntity<ReviewDTO> createEventReview(Authentication authentication, ReviewDTO reviewDTO) {
         reviewService.changeStrategy(seminarEventPointStrategy);
-
         return super.createEventReview(authentication, reviewDTO);
     }
 }

@@ -24,6 +24,7 @@ public class TicketController {
     private final TicketService ticketService;
     private final EventRepository eventRepository;
 
+
     @Autowired
     public TicketController(TicketService ticketService, EventRepository eventRepository) {
         this.ticketService = ticketService;
@@ -51,8 +52,9 @@ public class TicketController {
         }
     }
 
-    @PostMapping("/confirmAttendance/{eventId}")
-    public ResponseEntity<?> confirmAttendance(@PathVariable Long eventId, Authentication authentication) {
+
+    @PostMapping("/confirmAttendance/{eventId}/{userId}")
+    public ResponseEntity<?> confirmAttendance(@PathVariable Long eventId, @PathVariable Long userId, Authentication authentication) {
         try {
             User currentUser = (User) authentication.getPrincipal();
 
@@ -64,12 +66,13 @@ public class TicketController {
             Event event = eventOptional.get();
 
             if (EventUtils.isOrganizerOfEvent(event, currentUser)) {
-                Long userId = currentUser.getId();
                 ticketService.confirmAttendance(eventId, userId);
                 return ResponseEntity.ok("Presença confirmada com sucesso.");
             } else {
                 return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Usuário não autorizado a confirmar presença.");
             }
+        } catch (EntityNotFoundException | IllegalArgumentException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
@@ -88,7 +91,6 @@ public class TicketController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }
-
 
     @GetMapping("/countConfirmedUsersForEvent/{eventId}")
     public ResponseEntity<?> countConfirmedUsersForEvent(@PathVariable Long eventId) {

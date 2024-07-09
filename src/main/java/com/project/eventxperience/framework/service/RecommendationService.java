@@ -22,12 +22,14 @@ public class RecommendationService {
 
     public void changeRecommendationStrategy(RecommendationStrategy<?> strategy) {
         this.recommendationStrategy = strategy;
+        System.out.println("mudou para" + this.recommendationStrategy);
     }
 
     public <T> List<T> generateRecommendations(User user) {
         if (recommendationStrategy == null) {
             throw new IllegalStateException("Nenhuma estratégia de recomendação definida.");
         }
+        System.out.println("utilizando" + this.recommendationStrategy);
         return (List<T>) recommendationStrategy.recommend(user);
     }
 }

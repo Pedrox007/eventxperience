@@ -29,7 +29,6 @@ public class MusicEventRecommendationController extends RecommendationController
     @GetMapping
     public List<MusicEventResponseDTO> getEventRecommendations(Authentication authentication) {
         recommendationService.changeRecommendationStrategy(musicEventRecommendationStrategy);
-        User currentUser = (User) authentication.getPrincipal();
-        return recommendationService.generateRecommendations(currentUser);
+        return super.getEventRecommendations(authentication);
     }
 }

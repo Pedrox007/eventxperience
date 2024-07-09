@@ -29,7 +29,6 @@ public class SportEventRecommendationController extends RecommendationController
     @GetMapping
     public List<SportEventResponseDTO> getEventRecommendations(Authentication authentication) {
         recommendationService.changeRecommendationStrategy(sportEventRecommendationStrategy);
-        User currentUser = (User) authentication.getPrincipal();
-        return recommendationService.generateRecommendations(currentUser);
+        return super.getEventRecommendations(authentication);
     }
 }

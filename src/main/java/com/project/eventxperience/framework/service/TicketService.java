@@ -62,6 +62,10 @@ public class TicketService {
                 throw new EntityNotFoundException("Ticket não encontrado.");
             }
 
+            if (ticket.isConfirmed()) {
+                throw new IllegalArgumentException("A presença no evento já foi confirmada.");
+            }
+
             ticket.setConfirmed(true);
             ticketRepository.save(ticket);
         } catch (DataAccessException e) {

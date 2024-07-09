@@ -28,7 +28,6 @@ public class SeminarEventRecommendationController extends RecommendationControll
     @GetMapping
     public List<SeminarEventResponseDTO> getEventRecommendations(Authentication authentication) {
         recommendationService.changeRecommendationStrategy(seminarEventRecommendationStrategy);
-        User currentUser = (User) authentication.getPrincipal();
-        return recommendationService.generateRecommendations(currentUser);
+        return super.getEventRecommendations(authentication);
     }
 }
