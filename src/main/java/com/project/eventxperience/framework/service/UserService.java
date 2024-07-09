@@ -18,8 +18,8 @@ public class UserService {
             User user = userRepository.findById(userId)
                     .orElseThrow(() -> new EntityNotFoundException("Usuario não encontrado"));
 
-            int currentPoints = user.getPoints();
-            int newPoints = currentPoints + pointsToAdd;
+            Long currentPoints = user.getPoints();
+            Long newPoints = currentPoints + pointsToAdd;
             user.setPoints(newPoints);
 
             userRepository.save(user);

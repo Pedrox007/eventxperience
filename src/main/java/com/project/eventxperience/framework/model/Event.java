@@ -7,6 +7,7 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 
 import java.util.Date;
+import java.util.List;
 
 @EqualsAndHashCode(callSuper = true)
 @Entity
@@ -26,4 +27,6 @@ public class Event extends BaseModel {
     protected Float ticketPrice;
     @ManyToOne
     protected User creator;
+    @OneToMany(mappedBy = "event")
+    protected List<Ticket> tickets;
 }

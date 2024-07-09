@@ -1,7 +1,9 @@
 package com.project.eventxperience.framework.controller;
 
 import com.project.eventxperience.framework.model.Event;
+import com.project.eventxperience.framework.model.Ticket;
 import com.project.eventxperience.framework.model.User;
+import com.project.eventxperience.framework.model.dto.TicketDTO;
 import com.project.eventxperience.framework.repository.EventRepository;
 import com.project.eventxperience.framework.utils.EventUtils;
 import com.project.eventxperience.framework.service.TicketService;
@@ -37,7 +39,11 @@ public class TicketController {
     public ResponseEntity<?> purchaseTicket(@PathVariable Long eventId) {
         try {
             User currentUser = getCurrentUser();
-            return ResponseEntity.ok(ticketService.purchaseTicket(currentUser, eventId));
+            Ticket ticket = ticketService.purchaseTicket(currentUser, eventId);
+            TicketDTO ticketDTO = new TicketDTO();
+            ticketDTO.parseToDTO(ticket);
+
+            return ResponseEntity.ok(ticketDTO);
         } catch (EntityNotFoundException | IllegalArgumentException e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }  catch (Exception e) {

@@ -1,7 +1,5 @@
 package com.project.eventxperience.framework.model;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.project.eventxperience.framework.model.base.BaseModel;
 import com.project.eventxperience.framework.model.enums.ReviewValues;
 import jakarta.persistence.*;
@@ -10,11 +8,11 @@ import lombok.EqualsAndHashCode;
 
 @EqualsAndHashCode(callSuper = true)
 @Entity
-@Table(name="db_rating")
+@Table(name="db_review")
 @Data
 public class Review extends BaseModel {
     @Enumerated(EnumType.STRING)
-    private ReviewValues rating;
+    private ReviewValues review;
 
     @ManyToOne
     @JoinColumn(name="user_id")
@@ -24,4 +22,7 @@ public class Review extends BaseModel {
     @JoinColumn(name="attraction_id")
     private Attraction attraction;
 
+    @ManyToOne
+    @JoinColumn(name="event_id")
+    private Event event;
 }

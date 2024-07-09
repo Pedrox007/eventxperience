@@ -45,7 +45,7 @@ public class User extends BaseModel implements UserDetails {
     private Boolean active = true;
 
     @Column(name = "points")
-    private Integer points = 0;
+    private Long points = 0L;
 
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(

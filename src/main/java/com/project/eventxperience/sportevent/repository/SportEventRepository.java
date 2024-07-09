@@ -10,4 +10,6 @@ import java.util.List;
 @Repository
 public interface SportEventRepository extends EventRepository<SportEvent> {
     List<SportEvent> findBySport(Sport sport);
+
+    Long countByTickets_UserIdAndSportIdAndTickets_ConfirmedIsTrue(Long userId, Long sportId);
 }

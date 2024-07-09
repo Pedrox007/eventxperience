@@ -1,71 +1,53 @@
 package com.project.eventxperience.framework.controller;
 
-import com.project.eventxperience.framework.model.Review;
 import com.project.eventxperience.framework.model.User;
-import com.project.eventxperience.framework.model.dto.RatingDTO;
+import com.project.eventxperience.framework.model.dto.ReviewDTO;
 import com.project.eventxperience.framework.service.ReviewService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Optional;
+import java.util.List;
 
-@RestController
-@RequestMapping("/ratings")
-public class ReviewController {
-    private ReviewService ratingService;
+public abstract class ReviewController {
+    protected ReviewService reviewService;
 
-    @Autowired
-    public ReviewController(ReviewService ratingService) {
-        this.ratingService = ratingService;
+    public ReviewController(ReviewService reviewService) {
+        this.reviewService = reviewService;
     }
 
-    @PostMapping
-    public ResponseEntity<Review> addRating(@RequestBody RatingDTO ratingDTO) {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+    @PostMapping("/createEventReview")
+    public ResponseEntity<ReviewDTO> createEventReview(Authentication authentication, @RequestBody ReviewDTO reviewDTO) {
         User currentUser = (User) authentication.getPrincipal();
-
-        ratingDTO.setUserId(currentUser.getId());
-
-        Review createdRating = ratingService.saveRating(ratingDTO);
-
-        return ResponseEntity.ok(createdRating);
+        return ResponseEntity.ok(reviewService.saveEventReview(currentUser, reviewDTO));
     }
 
-    @DeleteMapping("/{id}")
-    public ResponseEntity<Review> deleteRating(@PathVariable Long id) {
-        Review ratingDeleted = ratingService.deleteById(id);
-
-        return ResponseEntity.ok(ratingDeleted);
+    @PostMapping("/createAttractionReview")
+    public ResponseEntity<ReviewDTO> createAttractionReview(Authentication authentication, @RequestBody ReviewDTO reviewDTO) {
+        User currentUser = (User) authentication.getPrincipal();
+        return ResponseEntity.ok(reviewService.saveAttractionReview(currentUser, reviewDTO));
     }
 
-    @GetMapping("/user/{userId}")
-    public ResponseEntity<Iterable<Review>> getAllRatingsByUserId(@PathVariable Long userId) {
-        Iterable<Review> ratings = ratingService.findAllByUserId(userId);
-
-        return ResponseEntity.ok(ratings);
+    @GetMapping("/listEventReviews/{id}")
+    public ResponseEntity<List<ReviewDTO>> listEventReviews(@PathVariable Long id) {
+        return ResponseEntity.ok(reviewService.listReviewsByEvent(id));
     }
 
-    @GetMapping("/attraction/{attractionId}")
-    public ResponseEntity<Iterable<Review>> getAllRatingsByAttractionId(@PathVariable Long attractionId) {
-        Iterable<Review> ratings = ratingService.findAllByAttractionId(attractionId);
-
-        return ResponseEntity.ok(ratings);
+    @GetMapping("/listAttractionReviews/{id}")
+    public ResponseEntity<List<ReviewDTO>> listAttractionReviews(@PathVariable Long id) {
+        return ResponseEntity.ok(reviewService.listReviewsByAttraction(id));
     }
 
-//    @GetMapping("/event/{eventId}")
-//    public ResponseEntity<Iterable<Review>> getAllRatingsByEventId(@PathVariable Long eventId) {
-//        Iterable<Review> ratings = ratingService.findAllByEventId(eventId);
-//
-//        return ResponseEntity.ok(ratings);
-//    }
+    @GetMapping("/listUserReviews/{id}")
+    public ResponseEntity<List<ReviewDTO>> listUserReviews(@PathVariable Long id) {
+        return ResponseEntity.ok(reviewService.listReviewsByUser(id));
+    }
 
-    @GetMapping("/{id}")
-    public ResponseEntity<Optional<Review>> getRatingById(@PathVariable Long id) {
-        Optional<Review> rating = ratingService.findById(id);
-
-        return ResponseEntity.ok(rating);
+    @DeleteMapping("/deleteReview/{id}")
+    public ResponseEntity<ReviewDTO> deleteReview(Authentication authentication, @PathVariable Long id) {
+        User currentUser = (User) authentication.getPrincipal();
+        return ResponseEntity.ok(reviewService.deleteReview(currentUser, id));
     }
 }

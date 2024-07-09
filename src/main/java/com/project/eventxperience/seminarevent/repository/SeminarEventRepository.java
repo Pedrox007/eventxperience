@@ -8,6 +8,7 @@ import com.project.eventxperience.seminarevent.model.Speaker;
 import org.springframework.stereotype.Repository;
 
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.List;
 import java.util.Set;
 
@@ -16,4 +17,6 @@ public interface SeminarEventRepository extends EventRepository<SeminarEvent> {
     List<SeminarEvent> findBySpeakers_In(Set<Long> speakers_id);
 
     List<SeminarEvent> findByTheme(String theme);
+
+    Long countByTickets_UserIdAndSpeakers_Id_InAndTickets_ConfirmedIsTrue(Long userId, List<Long> speakersIds);
 }
