@@ -7,6 +7,11 @@ import com.project.eventxperience.musicevent.model.MusicEvent;
 import com.project.eventxperience.musicevent.model.enums.MusicStyleValue;
 import com.project.eventxperience.musicevent.repository.BandRepository;
 import com.project.eventxperience.musicevent.repository.MusicEventRepository;
+import com.project.eventxperience.seminarevent.model.SeminarEvent;
+import com.project.eventxperience.seminarevent.model.Speaker;
+import com.project.eventxperience.seminarevent.repository.SeminarEventRepository;
+import com.project.eventxperience.seminarevent.repository.SpeakerRepository;
+import com.project.eventxperience.seminarevent.service.SeminarEventService;
 import com.project.eventxperience.sportevent.model.Sport;
 import com.project.eventxperience.sportevent.model.SportEvent;
 import com.project.eventxperience.sportevent.repository.SportEventRepository;
@@ -29,16 +34,20 @@ public class DataInitializer implements CommandLineRunner {
     private final SportEventRepository sportEventRepository;
     private final MusicEventRepository musicEventRepository;
     private final BandRepository bandRepository;
+    private final SeminarEventRepository seminarEventRepository;
+    private final SpeakerRepository speakerRepository;
     private final PasswordEncoder passwordEncoder;
 
     @Autowired
-    public DataInitializer(RoleRepository roleRepository, UserRepository userRepository, SportRepository sportRepository, SportEventRepository sportEventRepository, MusicEventRepository musicEventRepository, BandRepository bandRepository, PasswordEncoder passwordEncoder) {
+    public DataInitializer(RoleRepository roleRepository, UserRepository userRepository, SportRepository sportRepository, SportEventRepository sportEventRepository, MusicEventRepository musicEventRepository, BandRepository bandRepository, SeminarEventRepository seminarEventRepository, SpeakerRepository speakerRepository, PasswordEncoder passwordEncoder) {
         this.roleRepository = roleRepository;
         this.userRepository = userRepository;
         this.sportRepository = sportRepository;
         this.sportEventRepository = sportEventRepository;
         this.musicEventRepository = musicEventRepository;
         this.bandRepository = bandRepository;
+        this.seminarEventRepository = seminarEventRepository;
+        this.speakerRepository = speakerRepository;
         this.passwordEncoder = passwordEncoder;
     }
 
@@ -214,6 +223,76 @@ public class DataInitializer implements CommandLineRunner {
             fourthEvent.setBands(Arrays.asList(band4.orElse(null), band5.orElse(null)));
 
             musicEventRepository.saveAll(Arrays.asList(firstEvent, secondEvent, thirdEvent, fourthEvent));
+        }
+
+        // Criar palestrantes
+        if (speakerRepository.count() == 0) {
+            Speaker speaker1 = new Speaker();
+            speaker1.setName("Palestrante 1");
+            speaker1.setExpertise("Tecnologia");
+
+            Speaker speaker2 = new Speaker();
+            speaker2.setName("Palestrante 2");
+            speaker2.setExpertise("Negócios");
+
+            Speaker speaker3 = new Speaker();
+            speaker3.setName("Palestrante 3");
+            speaker3.setExpertise("Marketing");
+
+            Speaker speaker4 = new Speaker();
+            speaker4.setName("Palestrante 4");
+            speaker4.setExpertise("Vendas");
+
+            Speaker speaker5 = new Speaker();
+            speaker5.setName("Palestrante 5");
+            speaker5.setExpertise("Finanças");
+
+            speakerRepository.saveAll(Arrays.asList(speaker1, speaker2, speaker3, speaker4, speaker5));
+        }
+
+        // Criar eventos de seminário
+        if (seminarEventRepository.count() == 0) {
+            Optional<User> user1 = userRepository.findByUsername("carol");
+            Optional<User> user2 = userRepository.findByUsername("pedro");
+            Optional<Speaker> speaker1 = speakerRepository.findByName("Palestrante 1");
+            Optional<Speaker> speaker2 = speakerRepository.findByName("Palestrante 2");
+            Optional<Speaker> speaker3 = speakerRepository.findByName("Palestrante 3");
+            Optional<Speaker> speaker4 = speakerRepository.findByName("Palestrante 4");
+            Optional<Speaker> speaker5 = speakerRepository.findByName("Palestrante 5");
+
+            SeminarEvent firstEvent = new SeminarEvent();
+            firstEvent.setName("Seminário de tecnologia");
+            firstEvent.setDescription("Seminário de tecnologia com palestrantes locais");
+            firstEvent.setTicketQuantity(10);
+            firstEvent.setTicketPrice(10.0F);
+            firstEvent.setCreator(user1.orElse(null));
+            firstEvent.setSpeakers(Arrays.asList(speaker1.orElse(null), speaker2.orElse(null)));
+
+            SeminarEvent secondEvent = new SeminarEvent();
+            secondEvent.setName("Seminário de negócios");
+            secondEvent.setDescription("Seminário de negócios com palestrantes locais");
+            secondEvent.setTicketQuantity(20);
+            secondEvent.setTicketPrice(20.0F);
+            secondEvent.setCreator(user1.orElse(null));
+            secondEvent.setSpeakers(Arrays.asList(speaker2.orElse(null), speaker3.orElse(null)));
+
+            SeminarEvent thirdEvent = new SeminarEvent();
+            thirdEvent.setName("Seminário de marketing");
+            thirdEvent.setDescription("Seminário de marketing com palestrantes locais");
+            thirdEvent.setTicketQuantity(10);
+            thirdEvent.setTicketPrice(10.0F);
+            thirdEvent.setCreator(user2.orElse(null));
+            thirdEvent.setSpeakers(Arrays.asList(speaker3.orElse(null), speaker4.orElse(null)));
+
+            SeminarEvent fourthEvent = new SeminarEvent();
+            fourthEvent.setName("Seminário de vendas");
+            fourthEvent.setDescription("Seminário de vendas com palestrantes locais");
+            fourthEvent.setTicketQuantity(20);
+            fourthEvent.setTicketPrice(20.0F);
+            fourthEvent.setCreator(user2.orElse(null));
+            fourthEvent.setSpeakers(Arrays.asList(speaker4.orElse(null), speaker5.orElse(null)));
+
+            seminarEventRepository.saveAll(Arrays.asList(firstEvent, secondEvent, thirdEvent, fourthEvent));
         }
     }
 }
